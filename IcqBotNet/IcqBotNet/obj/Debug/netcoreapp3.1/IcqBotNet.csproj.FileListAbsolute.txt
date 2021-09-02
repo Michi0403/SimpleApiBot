@@ -1,0 +1,17 @@
+C:\Users\Michael-PC\source\repos\IcqBotNet\IcqBotNet\bin\Debug\netcoreapp3.1\IcqBotNet.exe
+C:\Users\Michael-PC\source\repos\IcqBotNet\IcqBotNet\bin\Debug\netcoreapp3.1\IcqBotNet.deps.json
+C:\Users\Michael-PC\source\repos\IcqBotNet\IcqBotNet\bin\Debug\netcoreapp3.1\IcqBotNet.runtimeconfig.json
+C:\Users\Michael-PC\source\repos\IcqBotNet\IcqBotNet\bin\Debug\netcoreapp3.1\IcqBotNet.runtimeconfig.dev.json
+C:\Users\Michael-PC\source\repos\IcqBotNet\IcqBotNet\bin\Debug\netcoreapp3.1\IcqBotNet.dll
+C:\Users\Michael-PC\source\repos\IcqBotNet\IcqBotNet\bin\Debug\netcoreapp3.1\IcqBotNet.pdb
+C:\Users\Michael-PC\source\repos\IcqBotNet\IcqBotNet\bin\Debug\netcoreapp3.1\IcqBotNetCore.dll
+C:\Users\Michael-PC\source\repos\IcqBotNet\IcqBotNet\bin\Debug\netcoreapp3.1\IcqBotNetCore.pdb
+C:\Users\Michael-PC\source\repos\IcqBotNet\IcqBotNet\obj\Debug\netcoreapp3.1\IcqBotNet.csproj.AssemblyReference.cache
+C:\Users\Michael-PC\source\repos\IcqBotNet\IcqBotNet\obj\Debug\netcoreapp3.1\IcqBotNet.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Michael-PC\source\repos\IcqBotNet\IcqBotNet\obj\Debug\netcoreapp3.1\IcqBotNet.AssemblyInfoInputs.cache
+C:\Users\Michael-PC\source\repos\IcqBotNet\IcqBotNet\obj\Debug\netcoreapp3.1\IcqBotNet.AssemblyInfo.cs
+C:\Users\Michael-PC\source\repos\IcqBotNet\IcqBotNet\obj\Debug\netcoreapp3.1\IcqBotNet.csproj.CoreCompileInputs.cache
+C:\Users\Michael-PC\source\repos\IcqBotNet\IcqBotNet\obj\Debug\netcoreapp3.1\IcqBotNet.csproj.CopyComplete
+C:\Users\Michael-PC\source\repos\IcqBotNet\IcqBotNet\obj\Debug\netcoreapp3.1\IcqBotNet.dll
+C:\Users\Michael-PC\source\repos\IcqBotNet\IcqBotNet\obj\Debug\netcoreapp3.1\IcqBotNet.pdb
+C:\Users\Michael-PC\source\repos\IcqBotNet\IcqBotNet\obj\Debug\netcoreapp3.1\IcqBotNet.genruntimeconfig.cache

@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "IcqBotNet/1.0.0": {
+        "dependencies": {
+          "IcqBotNetCore": "1.0.0"
+        },
+        "runtime": {
+          "IcqBotNet.dll": {}
+        }
+      },
+      "IcqBotNetCore/1.0.0": {
+        "runtime": {
+          "IcqBotNetCore.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "IcqBotNet/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "IcqBotNetCore/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

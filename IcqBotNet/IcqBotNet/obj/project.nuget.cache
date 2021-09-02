@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "it6OHr5t53aQ77qba5Ev0pWqXHVl7LWTe9bQAPZHngh1pvwjRiKYofXja+VTRxFmOLn6kb5fE5Y1zFUiOZkZnw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Michael-PC\\source\\repos\\IcqBotNet\\IcqBotNet\\IcqBotNet.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Michael-PC\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\Michael-PC\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
+    "C:\\Users\\Michael-PC\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\Michael-PC\\.nuget\\packages\\system.collections\\4.3.0\\system.collections.4.3.0.nupkg.sha512",
+    "C:\\Users\\Michael-PC\\.nuget\\packages\\system.runtime\\4.3.0\\system.runtime.4.3.0.nupkg.sha512"
+  ],
+  "logs": []
+}
