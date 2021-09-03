@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Michael-PC\\source\\repos\\IcqBotNet\\IcqBotNetCore\\IcqBotNetCore.csproj": {}
+    "C:\\Users\\Michael-PC\\Documents\\github\\SimpleApiBot\\IcqBotNet\\IcqBotNetCore\\IcqBotNetCore.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Michael-PC\\source\\repos\\IcqBotNet\\IcqBotNetCore\\IcqBotNetCore.csproj": {
+    "C:\\Users\\Michael-PC\\Documents\\github\\SimpleApiBot\\IcqBotNet\\IcqBotNetCore\\IcqBotNetCore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Michael-PC\\source\\repos\\IcqBotNet\\IcqBotNetCore\\IcqBotNetCore.csproj",
+        "projectUniqueName": "C:\\Users\\Michael-PC\\Documents\\github\\SimpleApiBot\\IcqBotNet\\IcqBotNetCore\\IcqBotNetCore.csproj",
         "projectName": "IcqBotNetCore",
-        "projectPath": "C:\\Users\\Michael-PC\\source\\repos\\IcqBotNet\\IcqBotNetCore\\IcqBotNetCore.csproj",
+        "projectPath": "C:\\Users\\Michael-PC\\Documents\\github\\SimpleApiBot\\IcqBotNet\\IcqBotNetCore\\IcqBotNetCore.csproj",
         "packagesPath": "C:\\Users\\Michael-PC\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Michael-PC\\source\\repos\\IcqBotNet\\IcqBotNetCore\\obj\\",
+        "outputPath": "C:\\Users\\Michael-PC\\Documents\\github\\SimpleApiBot\\IcqBotNet\\IcqBotNetCore\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",

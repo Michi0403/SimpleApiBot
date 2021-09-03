@@ -68,6 +68,15 @@ namespace IcqBotNetCore.BusinessObjects.Commands
         unordered_list,
         url,
         userId,
-        RequestUri
+        RequestUri,
+        Major,
+        Minor,
+        Build,
+        Revision,
+        MajorRevision,
+        MinorRevision,
+        Version,
+        Request,
+        NamelessArray
     }
 }

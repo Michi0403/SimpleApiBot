@@ -44,25 +44,25 @@ namespace IcqBotNet
 
             //var test = commandFactory.TryRunQueue();
             //Console.ReadLine();
-            commandFactory.TryAddCommandToQueue(commandFactory.CreateCommand(ApiCommandEnum.SelfGet));
-            Dictionary<ParamTypeEnum, string> testxxxsdf = new Dictionary<ParamTypeEnum, string>() { { ParamTypeEnum.lastEventId, "1" }, { ParamTypeEnum.pollTime, "5" } };
+            //commandFactory.TryAddCommandToQueue(commandFactory.CreateCommand(ApiCommandEnum.SelfGet));
+            //Dictionary<ParamTypeEnum, string> testxxxsdf = new Dictionary<ParamTypeEnum, string>() { { ParamTypeEnum.lastEventId, "1" }, { ParamTypeEnum.pollTime, "5" } };
 
-            ConcurrentDictionary<ParamTypeEnum, string> parametersdf = new ConcurrentDictionary<ParamTypeEnum, string>(testxxxsdf);
-            commandFactory.TryAddCommandToQueue(commandFactory.CreateCommand(ApiCommandEnum.GetEvents,parameter: parametersdf));
+            //ConcurrentDictionary<ParamTypeEnum, string> parametersdf = new ConcurrentDictionary<ParamTypeEnum, string>(testxxxsdf);
+            //commandFactory.TryAddCommandToQueue(commandFactory.CreateCommand(ApiCommandEnum.GetEvents,parameter: parametersdf));
 
-            Dictionary<ParamTypeEnum, string> sendMessageParameter = new Dictionary<ParamTypeEnum, string>() { { ParamTypeEnum.chatId, "691762017@chat.agent" }, { ParamTypeEnum.text, "- @[247319424]" } };
+            //Dictionary<ParamTypeEnum, string> sendMessageParameter = new Dictionary<ParamTypeEnum, string>() { { ParamTypeEnum.chatId, "691762017@chat.agent" }, { ParamTypeEnum.text, "- @[247319424]" } };
 
-            commandFactory.TryAddCommandToQueue(commandFactory.CreateCommand(ApiCommandEnum.SendText,HTTPMethodEnum.Get,sendMessageParameter.ToConcurrentDictionary()));
+            //commandFactory.TryAddCommandToQueue(commandFactory.CreateCommand(ApiCommandEnum.SendText,HTTPMethodEnum.Get,sendMessageParameter.ToConcurrentDictionary()));
 
             cfg.CommandList = commandFactory.CommandQueue.Cast<CommandTemplate>().ToList();
             var testdasdagf = commandFactory.TryRunFullQueue();
             cfg.Save(cfg.SettingConfig.PathToThisConfig + "demoCfg.xml");
 
-            var test = bot.BotResponseFactory.ResponseBag;
+            //var test = bot.BotResponseFactory.ResponseBag;
 
 
 
-            Console.WriteLine(bot.BotResponseFactory.ResponseBag.ToString());
+            //Console.WriteLine(bot.BotResponseFactory.ResponseBag.ToString());
             Console.ReadLine();
         }
     }

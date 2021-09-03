@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "gHsM6xsPZzydVzLmDlMrtDurACH7XaaelQ23XfliAWZnr8RPIXhrnVomAjrKYSxsmufELuH0Fsy5bs9VlBCA/A==",
+  "dgSpecHash": "NoXt47VtjkY0XbLW335aoJWi8Dq3hBW2tMsC7kk4yvzc7qVvrTaX5tkqZL1OIpCQFUU3DTfGb6U3pD/f9VivfQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Michael-PC\\source\\repos\\IcqBotNet\\IcqBotNetCore\\IcqBotNetCore.csproj",
+  "projectFilePath": "C:\\Users\\Michael-PC\\Documents\\github\\SimpleApiBot\\IcqBotNet\\IcqBotNetCore\\IcqBotNetCore.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Michael-PC\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\Michael-PC\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",

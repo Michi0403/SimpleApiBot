@@ -10,3 +10,15 @@ C:\Users\Michael-PC\source\repos\IcqBotNet\IcqBotNetCore\obj\Debug\net5.0\IcqBot
 C:\Users\Michael-PC\source\repos\IcqBotNet\IcqBotNetCore\obj\Debug\net5.0\IcqBotNetCore.dll
 C:\Users\Michael-PC\source\repos\IcqBotNet\IcqBotNetCore\obj\Debug\net5.0\ref\IcqBotNetCore.dll
 C:\Users\Michael-PC\source\repos\IcqBotNet\IcqBotNetCore\obj\Debug\net5.0\IcqBotNetCore.pdb
+C:\Users\Michael-PC\Documents\github\SimpleApiBot\IcqBotNet\IcqBotNetCore\bin\Debug\net5.0\IcqBotNetCore.deps.json
+C:\Users\Michael-PC\Documents\github\SimpleApiBot\IcqBotNet\IcqBotNetCore\bin\Debug\net5.0\IcqBotNetCore.dll
+C:\Users\Michael-PC\Documents\github\SimpleApiBot\IcqBotNet\IcqBotNetCore\bin\Debug\net5.0\ref\IcqBotNetCore.dll
+C:\Users\Michael-PC\Documents\github\SimpleApiBot\IcqBotNet\IcqBotNetCore\bin\Debug\net5.0\IcqBotNetCore.pdb
+C:\Users\Michael-PC\Documents\github\SimpleApiBot\IcqBotNet\IcqBotNetCore\obj\Debug\net5.0\IcqBotNetCore.csproj.AssemblyReference.cache
+C:\Users\Michael-PC\Documents\github\SimpleApiBot\IcqBotNet\IcqBotNetCore\obj\Debug\net5.0\IcqBotNetCore.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Michael-PC\Documents\github\SimpleApiBot\IcqBotNet\IcqBotNetCore\obj\Debug\net5.0\IcqBotNetCore.AssemblyInfoInputs.cache
+C:\Users\Michael-PC\Documents\github\SimpleApiBot\IcqBotNet\IcqBotNetCore\obj\Debug\net5.0\IcqBotNetCore.AssemblyInfo.cs
+C:\Users\Michael-PC\Documents\github\SimpleApiBot\IcqBotNet\IcqBotNetCore\obj\Debug\net5.0\IcqBotNetCore.csproj.CoreCompileInputs.cache
+C:\Users\Michael-PC\Documents\github\SimpleApiBot\IcqBotNet\IcqBotNetCore\obj\Debug\net5.0\IcqBotNetCore.dll
+C:\Users\Michael-PC\Documents\github\SimpleApiBot\IcqBotNet\IcqBotNetCore\obj\Debug\net5.0\ref\IcqBotNetCore.dll
+C:\Users\Michael-PC\Documents\github\SimpleApiBot\IcqBotNet\IcqBotNetCore\obj\Debug\net5.0\IcqBotNetCore.pdb
