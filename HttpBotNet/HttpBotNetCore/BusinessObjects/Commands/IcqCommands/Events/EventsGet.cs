@@ -21,7 +21,7 @@ namespace BotNetCore.BusinessObjects.Commands.IcqCommands.Events
         /// </summary>
         /// <param name="token"></param>
         /// <param name="client"></param>
-        public EventsGet(string token, HttpClient client, Dictionary<ParamTypeEnum,string> parameter) : base(client, token, parameter) 
+        public EventsGet(HttpClient client, string token, Dictionary<ParamTypeEnum, string> parameter, string httpMethod) : base(client, token, parameter, httpMethod) 
         {
             _routeBaseAdress = @"/events/get";
         }

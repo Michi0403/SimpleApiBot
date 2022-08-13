@@ -14,6 +14,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using BotNetCore.BusinessObjects.Enums.ApiCommandEnums;
+using BotNetCore.BusinessObjects.Enums.HttpEnums;
+using BotNetCore.Interfaces;
 
 namespace HttpBotNet
 {
@@ -37,22 +39,34 @@ namespace HttpBotNet
             bot.Initialize(cfg);
             cfg.CommandList.Clear();
             var commandFactory = new IcqCommandFactory(bot.HttpClient, cfg.SettingConfig.Token);
+
             Dictionary<ParamTypeEnum, string> testxxx = new Dictionary<ParamTypeEnum, string>() { { IcqParamTypeEnum.lastEventId, "0" }, { IcqParamTypeEnum.pollTime, "5" } };
-
             ConcurrentDictionary<ParamTypeEnum, string> parameter = new ConcurrentDictionary<ParamTypeEnum, string>(testxxx);
-            commandFactory.TryAddCommandToQueue(commandFactory.CreateCommand((ApiCommandEnum)IcqApiCommandEnum.GetEvents, BotNetCore.BusinessObjects.Enums.HttpEnums.HttpMethodEnum.Get, parameter: parameter));
+            if(commandFactory.CreateCommand((ApiCommandEnum)IcqApiCommandEnum.GetEvents, HttpMethodEnum.Get, parameter: parameter) is IBotCommand botcommand)
+                if(botcommand != null) commandFactory.TryAddCommandToQueue(botcommand);
 
+            if(commandFactory.CreateCommand((ApiCommandEnum)IcqApiCommandEnum.SelfGet, BotNetCore.BusinessObjects.Enums.HttpEnums.HttpMethodEnum.Get, parameter: parameter)is IBotCommand botcommand2)
+                if (botcommand2 != null) commandFactory.TryAddCommandToQueue(botcommand2);
+          
+            Dictionary<ParamTypeEnum, string> sendMessageParameter = new Dictionary<ParamTypeEnum, string>() { { IcqParamTypeEnum.chatId, "691762017@chat.agent" }, { IcqParamTypeEnum.text, "- @[247319424]" } };
+            ConcurrentDictionary<ParamTypeEnum, string> parameter2 = new ConcurrentDictionary<ParamTypeEnum, string>(sendMessageParameter);
+
+            if (commandFactory.CreateCommand((ApiCommandEnum)IcqApiCommandEnum.SendText, BotNetCore.BusinessObjects.Enums.HttpEnums.HttpMethodEnum.Get, parameter: parameter2) is IBotCommand botcommand4)
+                if (botcommand4 != null) commandFactory.TryAddCommandToQueue(botcommand4);
+
+            bool yeah = commandFactory.TryRunFullQueue();
+            Console.WriteLine(yeah.ToString());
             //var test = commandFactory.TryRunQueue();
             //Console.ReadLine();
             //commandFactory.TryAddCommandToQueue(commandFactory.CreateCommand(ApiCommandEnum.SelfGet));
             //Dictionary<ParamTypeEnum, string> testxxxsdf = new Dictionary<ParamTypeEnum, string>() { { ParamTypeEnum.lastEventId, "1" }, { ParamTypeEnum.pollTime, "5" } };
 
             //ConcurrentDictionary<ParamTypeEnum, string> parametersdf = new ConcurrentDictionary<ParamTypeEnum, string>(testxxxsdf);
-            //commandFactory.TryAddCommandToQueue(commandFactory.CreateCommand(ApiCommandEnum.GetEvents,parameter: parametersdf));
+            //commandFactory.TryAddCommandToQueue(commandFactory.CreateCommand(ApiCommandEnum.GetEvents, parameter: parametersdf));
 
             //Dictionary<ParamTypeEnum, string> sendMessageParameter = new Dictionary<ParamTypeEnum, string>() { { ParamTypeEnum.chatId, "691762017@chat.agent" }, { ParamTypeEnum.text, "- @[247319424]" } };
 
-            //commandFactory.TryAddCommandToQueue(commandFactory.CreateCommand(ApiCommandEnum.SendText,HTTPMethodEnum.Get,sendMessageParameter.ToConcurrentDictionary()));
+            //commandFactory.TryAddCommandToQueue(commandFactory.CreateCommand(ApiCommandEnum.SendText, HTTPMethodEnum.Get, sendMessageParameter.ToConcurrentDictionary()));
 
             cfg.CommandList = commandFactory.CommandQueue.Cast<CommandTemplate>().ToList();
             var testdasdagf = commandFactory.TryRunFullQueue();

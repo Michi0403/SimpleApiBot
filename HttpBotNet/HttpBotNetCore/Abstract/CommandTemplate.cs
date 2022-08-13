@@ -30,8 +30,11 @@ namespace BotNetCore.Abstract
         [DataMember]
         protected string _token;
 
+        public CommandTemplate()
+        {
 
-        public CommandTemplate(HttpClient client, string token, Dictionary<ParamTypeEnum, string> parameter = null, string httpMethod = "get")
+        }
+        public CommandTemplate(HttpClient client, string token, Dictionary<ParamTypeEnum, string> parameter, string httpMethod)
         {
             this._httpClient = client;
             this._token = token;

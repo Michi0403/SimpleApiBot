@@ -12,7 +12,7 @@ namespace BotNetCore.BusinessObjects.Commands.IcqCommands.Messages
     [DataContract]
     public class SendText : CommandTemplate
     {
-        public SendText(string token, HttpClient client, Dictionary<ParamTypeEnum, string> parameter) : base(client, token, parameter) 
+        public SendText(HttpClient client, string token, Dictionary<ParamTypeEnum, string> parameter, string httpMethod) : base(client, token, parameter, httpMethod) 
         {
             _routeBaseAdress = @"/messages/sendText";
         }

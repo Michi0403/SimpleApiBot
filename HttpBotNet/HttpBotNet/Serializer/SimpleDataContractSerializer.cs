@@ -13,7 +13,7 @@ namespace HttpBotNet.Serializer
     {
         public T Deserialize<T>(Stream stream)
         {
-            Assembly assembly = Assembly.Load(new AssemblyName("IcqBotNetCore"));
+            Assembly assembly = Assembly.Load(new AssemblyName("BotNetCore"));
 
             //typeof(Object), null, int.MaxValue, false, true, null, new MyDataContractResolver(assembly)
             //var serializer = new DataContractSerializer(typeof(T), null, int.MaxValue, false, true, null, new MyDataContractResolver(assembly),);
@@ -34,7 +34,7 @@ namespace HttpBotNet.Serializer
 
         public void Serialize<T>(T data, Stream stream)
         {
-            Assembly assembly = Assembly.Load(new AssemblyName("IcqBotNetCore"));
+            Assembly assembly = Assembly.Load(new AssemblyName("BotNetCore"));
 
             var resolver = new MyDataContractResolver(assembly);
             DataContractSerializerSettings setting = new DataContractSerializerSettings() { DataContractResolver = resolver };

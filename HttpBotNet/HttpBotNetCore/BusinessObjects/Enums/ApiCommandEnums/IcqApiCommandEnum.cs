@@ -1,5 +1,7 @@
-﻿using System;
+﻿using BotNetCore.Attributes;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -10,7 +12,7 @@ namespace BotNetCore.BusinessObjects.Enums.ApiCommandEnums
     [DataContract]
     public sealed class IcqApiCommandEnum : ApiCommandEnum
     {
-        [DataMember]
+        [DataMember, CommandAttribute(typeof(Commands.IcqCommands.Self.SelfGet))]
         public static readonly IcqApiCommandEnum AnswerCallbackQuery = new IcqApiCommandEnum("AnswerCallbackQuery");
         [DataMember]
         public static readonly IcqApiCommandEnum BlockUser = new IcqApiCommandEnum("BlockUser");
@@ -24,7 +26,7 @@ namespace BotNetCore.BusinessObjects.Enums.ApiCommandEnums
         public static readonly IcqApiCommandEnum GetAdmins = new IcqApiCommandEnum("GetAdmins");
         [DataMember]
         public static readonly IcqApiCommandEnum GetBlockedUsers = new IcqApiCommandEnum("GetBlockedUsers");
-        [DataMember]
+        [DataMember, CommandAttribute(typeof(Commands.IcqCommands.Events.EventsGet))]
         public static readonly IcqApiCommandEnum GetEvents = new IcqApiCommandEnum("GetEvents");
         [DataMember]
         public static readonly IcqApiCommandEnum GetFileInfo = new IcqApiCommandEnum("GetFileInfo");
@@ -36,13 +38,13 @@ namespace BotNetCore.BusinessObjects.Enums.ApiCommandEnums
         public static readonly IcqApiCommandEnum PinMessage = new IcqApiCommandEnum("PinMessage");
         [DataMember]
         public static readonly IcqApiCommandEnum ResolvePending = new IcqApiCommandEnum("ResolvePending");
-        [DataMember]
+        [DataMember, CommandAttribute(typeof(Commands.IcqCommands.Self.SelfGet))]
         public static readonly IcqApiCommandEnum SelfGet = new IcqApiCommandEnum("SelfGet");
         [DataMember]
         public static readonly IcqApiCommandEnum SendActions = new IcqApiCommandEnum("SendActions");
         [DataMember]
         public static readonly IcqApiCommandEnum SendFile = new IcqApiCommandEnum("SendFile");
-        [DataMember]
+        [DataMember, CommandAttribute(typeof(Commands.IcqCommands.Messages.SendText))]
         public static readonly IcqApiCommandEnum SendText = new IcqApiCommandEnum("SendText");
         [DataMember]
         public static readonly IcqApiCommandEnum SendVoice = new IcqApiCommandEnum("SendVoice");

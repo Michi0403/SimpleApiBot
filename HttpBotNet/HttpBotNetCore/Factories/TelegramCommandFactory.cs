@@ -9,13 +9,13 @@ using BotNetCore.Interfaces;
 
 namespace BotNetCore.Factories
 {
-    public class TelegramCommandFactory : IBotCommandFactoryTemplate
-    {
+    //public class TelegramCommandFactory : IBotCommandFactoryTemplate
+    //{
        
 
-        public TelegramCommandFactory(HttpClient httpClientRef, string token) : base(httpClientRef, token)
-        {
-        }
+    //    public TelegramCommandFactory(HttpClient httpClientRef, string token) : base(httpClientRef, token)
+    //    {
+    //    }
 
-    }
+    //}
 }

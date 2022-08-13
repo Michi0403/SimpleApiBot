@@ -1,4 +1,5 @@
 ﻿using BotNetCore.Abstract;
+using BotNetCore.BusinessObjects.Enums.ApiCommandEnums;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -8,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace BotNetCore.BusinessObjects.Commands.IcqCommands.Self
 {
-    [DataContract]
-    public class Self : CommandTemplate
+    [DataContract ]
+    public class SelfGet : CommandTemplate
     {
-        public Self(string token, HttpClient client) : base(client, token) 
+        public SelfGet(HttpClient client, string token, Dictionary<ParamTypeEnum, string> parameter, string httpMethod) : base(client, token, parameter, httpMethod) 
         {
             _routeBaseAdress = @"/self/get";
         }
