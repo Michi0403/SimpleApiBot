@@ -34,7 +34,7 @@ namespace BotNetCore.BusinessObjects
         /// Path to SSL Certificate, you can let your Bot generate a certificate include IcqBotNetCore.Helper Namespace with Certificateutil
         /// </summary>
         [DataMember]
-        public string PathToCert = Environment.CurrentDirectory;
+        public string PathToCert = Environment.CurrentDirectory.TrimEnd('\\') + '\\' + "MyCert.pfx";
         [DataMember]
         public string CertFileName = "MyCert";
         /// <summary>
@@ -51,11 +51,11 @@ namespace BotNetCore.BusinessObjects
         /// Path to this Configfile
         /// </summary>
         [DataMember]
-        public string PathToThisConfig = Environment.CurrentDirectory;
+        public string PathToThisConfig = Environment.CurrentDirectory.TrimEnd('\\') + '\\' + "demoCfg.xml";
         /// <summary>
         /// Path for Path for Http Data
         /// </summary>
         [DataMember]
-        public string PathForHttpData = Environment.CurrentDirectory;
+        public string PathForHttpData = Environment.CurrentDirectory.TrimEnd('\\') + '\\' + "httpData\\";
     }
 }
