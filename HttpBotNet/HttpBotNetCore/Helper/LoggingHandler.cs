@@ -24,6 +24,7 @@ namespace BotNetCore.Helper
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             Console.WriteLine("Request:");
+                Console.WriteLine($"RequestUri:{request.RequestUri}");
             Console.WriteLine(request.ToString());
 
             if(request != null)
@@ -39,7 +40,7 @@ namespace BotNetCore.Helper
 
             HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
 
-            Console.WriteLine("Response:");
+            
             Console.WriteLine(response.ToString());
             response.EnsureSuccessStatusCode();
             if (response.Content != null)
@@ -48,6 +49,10 @@ namespace BotNetCore.Helper
                     _onResponseContentAvailable(this, new GenericEventArgs<string,byte[]>(request.GetHashCode().ToString(),await response.Content.ReadAsByteArrayAsync()));
                 //Console.WriteLine(await response.Content.ReadAsStringAsync());
             }
+            Console.WriteLine($"Response: Success? => {response.IsSuccessStatusCode}");
+            Console.WriteLine($"Response: HttpStatuscode? => {response.StatusCode}");
+            Console.WriteLine($"RequestMessageToResponse? => {response.RequestMessage}");
+            Console.WriteLine(await response.Content.ReadAsStringAsync());
             Console.WriteLine();
 
             return response;

@@ -38,10 +38,10 @@ namespace BotNetCore.Abstract
         {
             this._httpClient = client;
             this._token = token;
-            //this.Parameter.Add(, token);
-            //if (parameter != null)
-            //    foreach (var param in parameter)
-            //        this.Parameter.Add(param.Key.ToString(), param.Value);
+            this.Parameter.Add(ParamTypeEnum.token, token);
+            if (parameter != null)
+                foreach (var param in parameter)
+                    this.Parameter.Add(param.Key, param.Value);
             this.HttpMethod = new HttpMethod(httpMethod);
         }
 
@@ -60,8 +60,7 @@ namespace BotNetCore.Abstract
             fullUrl.Append(_httpClient.BaseAddress.OriginalString.TrimEnd('/') + '/' + _routeBaseAdress.TrimEnd('/').TrimStart('/') + '?');
             foreach (KeyValuePair<ParamTypeEnum, string> entry in Parameter)
             {
-                //TODO REPAIR
-              //  fullUrl.Append(entry.Key + '=' + entry.Value +'&');
+                fullUrl.Append(entry.Key.Value + '=' + entry.Value +'&');
             }
             return fullUrl.ToString().TrimEnd('&');
         }
