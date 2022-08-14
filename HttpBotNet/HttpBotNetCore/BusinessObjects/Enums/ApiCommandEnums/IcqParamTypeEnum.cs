@@ -132,13 +132,25 @@ namespace BotNetCore.BusinessObjects.Enums.ApiCommandEnums
         [DataMember]
         public static readonly IcqParamTypeEnum userId = new IcqParamTypeEnum("userId");
         [DataMember]
+        public static readonly IcqParamTypeEnum Content = new IcqParamTypeEnum("Content");
+        [DataMember]
+        public static readonly IcqParamTypeEnum Headers = new IcqParamTypeEnum("Headers");
+        [DataMember]
+        public static readonly IcqParamTypeEnum Properties = new IcqParamTypeEnum("Properties");
+        [DataMember]
         public static readonly IcqParamTypeEnum RequestUri = new IcqParamTypeEnum("RequestUri");
         [DataMember]
         public static readonly IcqParamTypeEnum Major = new IcqParamTypeEnum("Major");
         [DataMember]
+        public static readonly IcqParamTypeEnum Method = new IcqParamTypeEnum("Method");
+        [DataMember]
         public static readonly IcqParamTypeEnum Minor = new IcqParamTypeEnum("Minor");
         [DataMember]
+        public static readonly IcqParamTypeEnum Options = new IcqParamTypeEnum("Options");
+        [DataMember]
         public static readonly IcqParamTypeEnum Build = new IcqParamTypeEnum("Build");
+        [DataMember]
+        public static readonly IcqParamTypeEnum Key = new IcqParamTypeEnum("Key");
         [DataMember]
         public static readonly IcqParamTypeEnum Revision = new IcqParamTypeEnum("Revision");
         [DataMember]
@@ -146,7 +158,11 @@ namespace BotNetCore.BusinessObjects.Enums.ApiCommandEnums
         [DataMember]
         public static readonly IcqParamTypeEnum MinorRevision = new IcqParamTypeEnum("MinorRevision");
         [DataMember]
+        public static readonly IcqParamTypeEnum Value = new IcqParamTypeEnum("Value");
+        [DataMember]
         public static readonly IcqParamTypeEnum Version = new IcqParamTypeEnum("Version");
+        [DataMember]
+        public static readonly IcqParamTypeEnum VersionPolicy = new IcqParamTypeEnum("VersionPolicy");
         [DataMember]
         public static readonly IcqParamTypeEnum Request = new IcqParamTypeEnum("Request");
         [DataMember]

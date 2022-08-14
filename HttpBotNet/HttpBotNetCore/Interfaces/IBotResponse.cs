@@ -1,4 +1,5 @@
 ﻿using BotNetCore.BusinessObjects.Enums.ApiCommandEnums;
+using BotNetCore.BusinessObjects.Responses.ResponeComposite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,11 @@ namespace BotNetCore.Interfaces
 {
     public interface IBotResponse
     {
-        public List<List<(ParamTypeEnum, object)>> Request
+        public ParamTypeEnumComposite Request
         {
             get;
         }
-        public List<List<(ParamTypeEnum, object)>> Response
+        public ParamTypeEnumComposite Response
         {
             get;
         }

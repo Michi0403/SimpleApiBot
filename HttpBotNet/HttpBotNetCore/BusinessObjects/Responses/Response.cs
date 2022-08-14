@@ -1,5 +1,6 @@
 ﻿using BotNetCore.Abstract;
 using BotNetCore.BusinessObjects.Enums.ApiCommandEnums;
+using BotNetCore.BusinessObjects.Responses.ResponeComposite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace BotNetCore.BusinessObjects.Responses
 {
     public class Response : ResponseTemplate
     {
-        public Response(List<List<(ParamTypeEnum, object)>> request, List<List<(ParamTypeEnum, object)>> respond) : base ( request, respond)
+        public Response(ParamTypeEnumComposite request, ParamTypeEnumComposite respond) : base ( request, respond)
         {
 
         }

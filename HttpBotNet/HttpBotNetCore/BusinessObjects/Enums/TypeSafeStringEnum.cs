@@ -17,6 +17,11 @@ namespace BotNetCore.BusinessObjects.Enums
         [DataMember]
         public string Value { get; private set; }
 
+        public TypeSafeStringEnum GetMe()
+        {
+            return this;
+        }
+
         public override string ToString()
         {
             return this.Value;

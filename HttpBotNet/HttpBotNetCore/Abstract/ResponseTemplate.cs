@@ -1,4 +1,5 @@
 ﻿using BotNetCore.BusinessObjects.Enums.ApiCommandEnums;
+using BotNetCore.BusinessObjects.Responses.ResponeComposite;
 using BotNetCore.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -13,19 +14,19 @@ namespace BotNetCore.Abstract
     public abstract class ResponseTemplate : IBotResponse
     {
         [DataMember]
-        protected List<List<(ParamTypeEnum, object)>> _respond;
+        protected ParamTypeEnumComposite _respond;
         
         [DataMember]
-        protected List<List<(ParamTypeEnum, object)>> _request;
+        protected ParamTypeEnumComposite _request;
 
-        public ResponseTemplate(List<List<(ParamTypeEnum, object)>> request, List<List<(ParamTypeEnum, object)>> respond)
+        public ResponseTemplate(ParamTypeEnumComposite request, ParamTypeEnumComposite respond)
         {
             _respond = respond;
             _request = request;
         }
 
-        public List<List<(ParamTypeEnum, object)>> Request => _request;
+        public ParamTypeEnumComposite Request => _request;
 
-        public List<List<(ParamTypeEnum, object)>> Response => _respond;
+        public ParamTypeEnumComposite Response => _respond;
     }
 }

@@ -41,32 +41,32 @@ namespace HttpBotNet
             cfg.CommandList.Clear();
             var commandFactory = new IcqCommandFactory(bot.HttpClient, cfg.SettingConfig.Token);
 
-            //Dictionary<ParamTypeEnum, string> test2 = new Dictionary<ParamTypeEnum, string>() { { IcqParamTypeEnum.lastEventId, "5" }, { IcqParamTypeEnum.pollTime, "60" } };
-            //ConcurrentDictionary<ParamTypeEnum, string> parameter23 = new ConcurrentDictionary<ParamTypeEnum, string>(test2);
-            //if (commandFactory.CreateCommand((ApiCommandEnum)IcqApiCommandEnum.GetEvents, HttpMethodEnum.Get, parameter: parameter23) is IBotCommand botcommand3)
-            //    if (botcommand3 != null) commandFactory.TryAddCommandToQueue(botcommand3);
+            Dictionary<ParamTypeEnum, string> test2 = new Dictionary<ParamTypeEnum, string>() { { IcqParamTypeEnum.lastEventId, "7" }, { IcqParamTypeEnum.pollTime, "60" } };
+            ConcurrentDictionary<ParamTypeEnum, string> parameter23 = new ConcurrentDictionary<ParamTypeEnum, string>(test2);
+            if (commandFactory.CreateCommand((ApiCommandEnum)IcqApiCommandEnum.GetEvents, HttpMethodEnum.Get, parameter: parameter23) is IBotCommand botcommand3)
+                if (botcommand3 != null) commandFactory.TryAddCommandToQueue(botcommand3);
 
-            //Dictionary<ParamTypeEnum, string> testxxx = new Dictionary<ParamTypeEnum, string>() { };
-            //ConcurrentDictionary<ParamTypeEnum, string> parameter = new ConcurrentDictionary<ParamTypeEnum, string>(testxxx);
-            //if (commandFactory.CreateCommand((ApiCommandEnum)IcqApiCommandEnum.SelfGet, HttpMethodEnum.Get, parameter: parameter) is IBotCommand botcommand2)
-            //    if (botcommand2 != null) commandFactory.TryAddCommandToQueue(botcommand2);
+            Dictionary<ParamTypeEnum, string> testxxx = new Dictionary<ParamTypeEnum, string>() { };
+            ConcurrentDictionary<ParamTypeEnum, string> parameter = new ConcurrentDictionary<ParamTypeEnum, string>(testxxx);
+            if (commandFactory.CreateCommand((ApiCommandEnum)IcqApiCommandEnum.SelfGet, HttpMethodEnum.Get, parameter: parameter) is IBotCommand botcommand2)
+                if (botcommand2 != null) commandFactory.TryAddCommandToQueue(botcommand2);
 
-            //Dictionary<ParamTypeEnum, string> sendMessageParameter = new Dictionary<ParamTypeEnum, string>() { { IcqParamTypeEnum.chatId, "691762017@chat.agent" }, { IcqParamTypeEnum.text, "- @[247319424]" } };
-            //ConcurrentDictionary<ParamTypeEnum, string> parameter2 = new ConcurrentDictionary<ParamTypeEnum, string>(sendMessageParameter);
-
-            //if (commandFactory.CreateCommand((ApiCommandEnum)IcqApiCommandEnum.SendText, HttpMethodEnum.Get, parameter: parameter2) is IBotCommand botcommand4)
-            //    if (botcommand4 != null) commandFactory.TryAddCommandToQueue(botcommand4);
-
-
-            Dictionary<ParamTypeEnum, string> sendMessageParameter = new Dictionary<ParamTypeEnum, string>()
-            {
-                { IcqParamTypeEnum.chatId, "683705214@chat.agent" },
-                { IcqParamTypeEnum.text, "@[573309697] *Guten Morgen,* ~magst Du Gurke?~" }
-            };
+            Dictionary<ParamTypeEnum, string> sendMessageParameter = new Dictionary<ParamTypeEnum, string>() { { IcqParamTypeEnum.chatId, "691762017@chat.agent" }, { IcqParamTypeEnum.text, "- @[247319424]" } };
             ConcurrentDictionary<ParamTypeEnum, string> parameter2 = new ConcurrentDictionary<ParamTypeEnum, string>(sendMessageParameter);
 
             if (commandFactory.CreateCommand((ApiCommandEnum)IcqApiCommandEnum.SendText, HttpMethodEnum.Get, parameter: parameter2) is IBotCommand botcommand4)
                 if (botcommand4 != null) commandFactory.TryAddCommandToQueue(botcommand4);
+
+
+            //Dictionary<ParamTypeEnum, string> sendMessageParameter = new Dictionary<ParamTypeEnum, string>()
+            //{
+            //    { IcqParamTypeEnum.chatId, "683705214@chat.agent" },
+            //    { IcqParamTypeEnum.text, "@[573309697] *Guten Morgen,* ~magst Du Gurke?~" }
+            //};
+            //ConcurrentDictionary<ParamTypeEnum, string> parameter2 = new ConcurrentDictionary<ParamTypeEnum, string>(sendMessageParameter);
+
+            //if (commandFactory.CreateCommand((ApiCommandEnum)IcqApiCommandEnum.SendText, HttpMethodEnum.Get, parameter: parameter2) is IBotCommand botcommand4)
+            //    if (botcommand4 != null) commandFactory.TryAddCommandToQueue(botcommand4);
 
             //var test = commandFactory.TryRunQueue();
             //Console.ReadLine();

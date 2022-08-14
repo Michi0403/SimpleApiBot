@@ -53,6 +53,7 @@ namespace BotNetCore.Factories
                         {
                             if(commandAttribute.CommandType is Type commandType) {
                                 
+                                //dynamically invoking attribute type for future plugins or external access
                                 ConstructorInfo constructorInfo = commandType.GetConstructor(
                                 new Type[]
                                 {
@@ -63,10 +64,6 @@ namespace BotNetCore.Factories
                                 });
                                 botCommand = (IBotCommand)constructorInfo.Invoke(
                                 new object[] { _httpClient, _token, parameter.ToParamTypeCommandTemplateList(), httpMethod.Value });
-
-                                //botCommand = (IBotCommand)Activator.CreateInstance(
-                                //    commandType.GetType(),BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.OptionalParamBinding,null,
-                                //    new object[] { _httpClient, _token, parameter, httpMethod.Value }, null);
                                 return botCommand;
                             }
                         }
@@ -98,6 +95,8 @@ namespace BotNetCore.Factories
         {
             try
             {
+                //TODO 
+                throw new NotImplementedException();
                 return true;
             }
             catch (Exception ex)

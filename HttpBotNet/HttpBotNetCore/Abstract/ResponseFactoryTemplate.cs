@@ -11,6 +11,8 @@ using System.Runtime.Serialization;
 using BotNetCore.Extensions;
 using BotNetCore.BusinessObjects.Enums.ApiCommandEnums;
 using BotNetCore.BusinessObjects.Enums;
+using BotNetCore.BusinessObjects.Responses.ResponeComposite;
+using System.Reflection;
 
 namespace BotNetCore.Abstract
 {
@@ -24,7 +26,7 @@ namespace BotNetCore.Abstract
         public IJSONSerializer serializer { get; set; } = StringExtension.Singleton.Instance.Serializer;
 
         [DataMember]
-        public ConcurrentDictionary<string, List<List<(ParamTypeEnum, object)>>> RequestDictionary = new ConcurrentDictionary<string, List<List<(ParamTypeEnum, object)>>>();
+        public ConcurrentDictionary<string, ParamTypeEnumComposite> RequestDictionary = new ConcurrentDictionary<string, ParamTypeEnumComposite>();
 
         public ResponseFactoryTemplate()
         {
@@ -33,8 +35,8 @@ namespace BotNetCore.Abstract
         public IBotResponse CreateResponseFromJson(JsonDocument request, JsonDocument response)
         {
 
-            List<List<(ParamTypeEnum, object)>> requestContent = ParseJsonDocument(request);
-            List<List<(ParamTypeEnum, object)>> responseContent = ParseJsonDocument(response);
+            ParamTypeEnumComposite requestContent = ParseJsonDocument(request);
+            ParamTypeEnumComposite responseContent = ParseJsonDocument(response);
 
             IBotResponse returnRespond = new Response(requestContent, responseContent);
 
@@ -46,7 +48,7 @@ namespace BotNetCore.Abstract
         {
             try
             {
-                List<List<(ParamTypeEnum, object)>> requestContent = ParseJsonDocument(request);
+                ParamTypeEnumComposite requestContent = ParseJsonDocument(request);
                 RequestDictionary.TryAdd(requestHash, requestContent);
                 return requestHash;
 
@@ -58,23 +60,26 @@ namespace BotNetCore.Abstract
             }
         }
 
-        public List<(IcqParamTypeEnum,object)> GetListOfContainedParams(IBotResponse response,IcqParamTypeEnum param)
+        public ParamTypeEnumComposite GetListOfContainedParams(IBotResponse response,IcqParamTypeEnum param)
         {
             try
             {
-                List<(IcqParamTypeEnum, object)> returnList = new List<(IcqParamTypeEnum, object)>();
+                ParamTypeEnumComposite returnList = null;
 
-                foreach(var list in response.Request.Intersect(response.Response) )
-                {
-                   //TODO
-                   // returnList.AddRange(list.Where(x => x.Item1 == param).Select(y => y));
-                }
+                //TODO Overwork
+                Console.WriteLine("Whatever is written here doesn't work right now");
+
+                    //foreach(var list in response.Request.Intersect(response.Response) )
+                    //{
+                    //   returnList.AddRange((List<(IcqParamTypeEnum, object)>)list.Where(x => (IcqParamTypeEnum)x.Item1== param).Select(y => y));
+                //}
+                //return returnList;
                 return returnList;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                return new List<(IcqParamTypeEnum, object)>();
+                return null;
             }
         }
 
@@ -82,12 +87,12 @@ namespace BotNetCore.Abstract
         {
             try
             {
-                List<List<(ParamTypeEnum, object)>> request = new List<List<(ParamTypeEnum, object)>>();
-                if( RequestDictionary.TryGetValue(requestHash, out List<List<(ParamTypeEnum, object)>>  value))
+                ParamTypeEnumComposite request = null;
+                if( RequestDictionary.TryGetValue(requestHash, out ParamTypeEnumComposite value))
                 {
                     request = value;
                 }
-                List<List<(ParamTypeEnum, object)>> responseContent = ParseJsonDocument(response, objectFirstParam);
+                ParamTypeEnumComposite responseContent = ParseJsonDocument(response, objectFirstParam);
 
                 IBotResponse returnRespond = new Response(request, responseContent);
                 return returnRespond;
@@ -108,340 +113,94 @@ namespace BotNetCore.Abstract
         /// <param name="objectFirstParam"></param>
         /// maybe unnecessary who knows
         /// <returns></returns>
-        private List<List<(ParamTypeEnum, object)>> ParseJsonDocument(JsonDocument jsonDocument, ParamTypeEnum paramTypeEnum = null)
+        private ParamTypeEnumComposite ParseJsonDocument(JsonDocument jsonDocument, ParamTypeEnum paramTypeEnum = null)
         {
             try
             {
                 List<List<(ParamTypeEnum, object)>> keyValuePairs = new List<List<(ParamTypeEnum, object)>>();
-
+                ParamTypeEnumComposite rootTrunk = new ParamTypeEnumComposite(ParamTypeEnum.isRootTrunk,"Start Trunk of JSON Document!");
                 JsonElement root = jsonDocument.RootElement;
-                Enumerate(root);
+                Enumerate(root, rootTrunk);
 
-
-                return keyValuePairs;
+                return rootTrunk;
 
                 
-                void Enumerate(JsonElement elementToProcess, List<(IcqParamTypeEnum,object)> nestedList = null, bool nestedCall=false)
+                void Enumerate(JsonElement elementToProcess, ParamTypeEnumComposite actualOrNewComposite)
                 {
-                    /*
-                     * Step one Add all properties from elementToProcess to keyValuePairs BUT ONLY like Paramtype Events, list of events && Paramtype Ok, true
-                     * If it's a nested call it will be NEVER necessary to add to keyValuePairs because -> You would add the inner Objects and Arrays to the outer Objects and Arrays
-                     * If you have a Param Like Events (Array) it contains a list of objects, for useful approch List of Events, Should contain a List of the nested Objects
-                     * The nested Objects should contain in a Own list. If a Paramtype is a Object, Array it should Containt like ParamType Events a List which contains all properties (nested lists and so on) 
-                     * 
-                     * What i've learned -> in All "Root Element" seems to be an Object???
-                     * 
-                     * Example JSON Starts with Objects Events and a simple Param with int or whatever. This contents have to be in the Outer List
-                     */
-                    List<(IcqParamTypeEnum, object)> objectList = new List<(IcqParamTypeEnum, object)>();
-                    try
+                    ParamTypeEnumComposite paramTypeEnumComposite = actualOrNewComposite;
+                    switch ((elementToProcess.ValueKind))
                     {
-                        switch (elementToProcess.ValueKind)
-                        {
-                            case JsonValueKind.Undefined:
-                                break;
-                            case JsonValueKind.Object:
+                        case JsonValueKind.Undefined:
+                            break;
+                        case JsonValueKind.Object:
+                            ParamTypeEnumComposite compositeObject = new ParamTypeEnumComposite(
+                            actualOrNewComposite.paramTypeEnum,
+                            elementToProcess.GetRawText());
+                            foreach(JsonProperty jsonProperty in elementToProcess.EnumerateObject())
+                            {
+                                Enumerate(jsonProperty.Value, compositeObject);
+
+                                Console.WriteLine("ValueMember; Try to find IcqParamTypeEnum with name of :" + jsonProperty.Name);
+                                IcqParamTypeEnum param = null;
+
                                 try
                                 {
-                                    
-                                    foreach (JsonProperty item in elementToProcess.EnumerateObject())
-                                    {
-                                        //the Objects I tested contained Objects, Properties and Arrays
-                                        //Does the Object Containts Arrays or Objects?????
-                                        switch (item.Value.ValueKind)
-                                        {
-                                            case JsonValueKind.Object:
-                                                //If Object or Array we have to enumerate it and put the values to a list
-                                                //Add Object / Array To List as Entry? Uff
-                                                if(nestedList == null)
-                                                    nestedList = new List<(IcqParamTypeEnum, object)>();
-
-                                                Enumerate(item.Value, nestedList, true);
-
-                                                if(nestedList.Count>0)
-                                                {
-                                                    if (Enum.IsDefined(typeof(IcqParamTypeEnum), item.Name))
-                                                    {
-                                                        ////TODO
-                                                        //if (!objectList.Contains(new(Enum.Parse<ParamTypeEnum>(item.Name), nestedList)))
-                                                        //{
-                                                        //    objectList.Add(new(Enum.Parse<ParamTypeEnum>(item.Name), nestedList));
-                                                        //}
-                                                    }
-                                                    //else
-                                                    //TODO
-                                                        //if (!objectList.Contains(new(IcqParamTypeEnum.notDefined, nestedList)))
-                                                        //{
-                                                        //    objectList.Add(new(IcqParamTypeEnum.notDefined, nestedList));
-                                                        //}
-                                                }
-                                                break;
-
-                                            case JsonValueKind.Array:
-                                                break;
-                                            case JsonValueKind.Undefined:
-                                            case JsonValueKind.String:
-                                            case JsonValueKind.Number:
-                                            case JsonValueKind.True:
-                                            case JsonValueKind.False:
-                                            case JsonValueKind.Null:
-                                                //TODO overwork
-                                                //if (Enum.IsDefined(typeof(IcqParamTypeEnum), item.Name))
-                                                //{
-                                                //    //TODO
-                                                //    if (!objectList.Contains(new(Enum.Parse<ParamTypeEnum>(item.Name).ToString(), item.Value.GetRawText())))
-                                                //    {
-                                                //        objectList.Add(new(Enum.Parse<ParamTypeEnum>(item.Name), item.Value.GetRawText()));
-                                                //    }
-                                                //}  
-                                                //else
-                                                //    if (!objectList.Contains(new(IcqParamTypeEnum.notDefined, item.Value.GetRawText())))
-                                                //    {
-                                                //        objectList.Add(new(IcqParamTypeEnum.notDefined, item.Value.GetRawText()));
-                                                //    }
-                                                break;
-                                            default:
-                                                break;
-                                        }
-                                    }
-
+                                        param = (IcqParamTypeEnum)typeof(IcqParamTypeEnum).GetField(
+                                        jsonProperty.Name,
+                                        BindingFlags.Instance |
+                                            BindingFlags.Static |
+                                            BindingFlags.Public |
+                                            BindingFlags.NonPublic)
+                                        .GetValue(null);
                                 }
                                 catch (Exception ex)
                                 {
-                                    Console.WriteLine(ex.ToString());
+                                    Console.WriteLine($"IcqParamTypeEnum {jsonProperty.Name} not found: {ex}");
                                 }
 
-
-                                break;
-                            case JsonValueKind.Array:
-                                foreach(JsonElement element in elementToProcess.EnumerateArray())
+                                if (param != null)
                                 {
-                                    // The kind of Arrays I tested contained Objects and Properties
-                                    try
-                                    {
-                                        //Does the Array Contains Arrays or Objects????? 
-                                        switch (element.ValueKind)
-                                        {
-                                            case JsonValueKind.Object:
-                                            case JsonValueKind.Array:
-
-                                                Console.WriteLine(elementToProcess.ToString());
-                                                Console.WriteLine(element.ToString());
-
-                                                if(nestedList == null)
-                                                    nestedList = new List<(IcqParamTypeEnum, object)>();
-
-                                                Enumerate(element, nestedList, true);
-
-                                                if (nestedList.Count > 0)
-                                                {
-
-                                                    if (!objectList.Contains(new(IcqParamTypeEnum.NamelessArray, nestedList)))
-                                                    {
-                                                        //objectList.Add(new(ParamTypeEnum.NamelessArray, nestedList));
-                                                    }
-                                                }
-                                                break;
-                                            case JsonValueKind.Undefined:
-                                                //Can be shitdata/faulty data so... only in an object.
-                                                break;
-                                            case JsonValueKind.String:
-                                            case JsonValueKind.Number:
-                                            case JsonValueKind.True:
-                                            case JsonValueKind.False:
-                                            case JsonValueKind.Null:
-
-                                                //if(nestedCall)
-                                                //{
-                                                Enumerate(element, nestedList, true);
-                                                //}
-                                                //else
-                                                //{
-
-                                                //}
-
-                                                break;
-                                            default:
-                                                break;
-                                        }
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Console.WriteLine(ex.ToString());
-                                    }
+                                    ParamTypeEnumLeaf leaf = new ParamTypeEnumLeaf(param, jsonProperty.Value.ToString());
+                                    compositeObject.Add(leaf);
+                                    Console.WriteLine("Found: " + jsonProperty.Name);
                                 }
-                                break;
-                            case JsonValueKind.String:
-                                break;
-                            case JsonValueKind.Number:
-                                break;
-                            case JsonValueKind.True:
-                                break;
-                            case JsonValueKind.False:
-                                break;
-                            case JsonValueKind.Null:
-                                break;
-                            default:
-                                break;
-                        }
-                        //add every object to keyvaluepairs or list depends on what is what and where you are
-                        if (!nestedCall)
-                        {
-                            //TODO OVERWORK
-                            //keyValuePairs.Add(objectList);
-                        }
-                        else
-                        {
-                            nestedList.AddRange(objectList);
-                        }
+                                else
+                                {
+                                    Console.WriteLine($"ParamTypeEnum {paramTypeEnum} not found! Skip");
+                                }
 
+                            }
+                            actualOrNewComposite.Add(compositeObject);
+                            break;
+                        case JsonValueKind.Array:
+                            ParamTypeEnumComposite compositeObject2 = new ParamTypeEnumComposite(
+                                ParamTypeEnum.IsArray,
+                                elementToProcess.GetRawText());
+                            foreach(var jsonElement in elementToProcess.EnumerateArray())
+                            {
+                                Enumerate(jsonElement, compositeObject2);
+                            }
+                            actualOrNewComposite.Add(compositeObject2);
+                            break;
 
+                        case JsonValueKind.String:
+                        case JsonValueKind.Number:
+                        case JsonValueKind.True:
+                        case JsonValueKind.False:
+                        case JsonValueKind.Null:
+                            ParamTypeEnumLeaf leaf2 = new ParamTypeEnumLeaf(actualOrNewComposite.paramTypeEnum, elementToProcess.GetRawText());
+                                actualOrNewComposite.Add((leaf2));
+                            break;
+                        default:
+                            break;
                     }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.ToString());
-                    }
-                    //if(element.ValueKind == JsonValueKind.Object)
-                    //{
-
-                    //    foreach (JsonProperty item in element.EnumerateObject())
-                    //    {
-                    //        if (Enum.IsDefined(typeof(ParamTypeEnum), item.Name))
-                    //        {
-                    //            if (Enum.Equals(Enum.Parse<ParamTypeEnum>(item.Name), objectFirstParam))
-                    //            {
-                    //                if (objectList != null)
-                    //                {
-                    //                    if (!keyValuePairs.Contains(objectList))
-                    //                        if (!nestedCall)
-                    //                            keyValuePairs.Add(objectList);
-                    //                }
-                    //                else
-                    //                {
-
-                    //                    objectList = new List<(ParamTypeEnum, object)>();
-                    //                }
-                    //            }
-
-
-                    //            if (item.Value.ValueKind != JsonValueKind.Object && item.Value.ValueKind != JsonValueKind.Array)
-                    //            {
-                    //                if(objectList == null)
-                    //                    objectList = new List<(ParamTypeEnum, object)>();
-                    //                if (!objectList.Contains(new(Enum.Parse<ParamTypeEnum>(item.Name), item.Value.GetRawText())))
-                    //                    objectList.Add(new(Enum.Parse<ParamTypeEnum>(item.Name), item.Value.GetRawText()));
-                    //            }
-
-
-                    //            if (item.Value.ValueKind == JsonValueKind.Object || item.Value.ValueKind == JsonValueKind.Array)
-                    //            {
-                    //                //if (!objectList.Contains(new(Enum.Parse<ParamTypeEnum>(item.Name), item.Value)))
-                    //                //    objectList.Add(new(Enum.Parse<ParamTypeEnum>(item.Name), item.Value.GetRawText()));
-                    //                List<(ParamTypeEnum, object)> nestedObjectList = new List<(ParamTypeEnum, object)>();
-                    //                if(nestedCall)
-                    //                    Enumerate(item.Value, nestedObjectList, nestedCall:true);
-                    //                else
-                    //                    Enumerate(item.Value, nestedObjectList, nestedCall:false);
-                    //                if (objectList == null)
-                    //                    objectList = new List<(ParamTypeEnum, object)>();
-
-                    //                if (nestedCall && objectList.Count > 0 || nestedObjectList.Count> 0)
-                    //                {
-                    //                    nestedObjectList = objectList.Intersect(nestedObjectList).ToList();
-                    //                }
-                    //                if(nestedObjectList.Count > 0)
-                    //                    if (!objectList.Contains(new(Enum.Parse<ParamTypeEnum>(item.Name), nestedObjectList)))
-                    //                        objectList.Add(new(Enum.Parse<ParamTypeEnum>(item.Name), (object)nestedObjectList));
-
-                    //            }
-
-
-                    //        }
-                    //    }
-                    //    if(!keyValuePairs.Contains(objectList))
-                    //        if(!nestedCall)
-                    //            keyValuePairs.Add(objectList);
-
-
-                    //} else if (element.ValueKind == JsonValueKind.Array)
-                    //{
-                    //    var test = element.EnumerateArray();
-
-                    //    do
-                    //    {
-                    //        if(test.Current.ValueKind == JsonValueKind.Object)
-                    //        {
-                    //            List<(ParamTypeEnum, object)> nestedObjectList = new List<(ParamTypeEnum, object)>();
-
-                    //            Enumerate(test.Current , nestedObjectList, nestedCall);
-
-                    //            if (nestedObjectList.Count > 0)
-                    //                if (!objectList.Contains(new(objectFirstParam, nestedObjectList)))
-                    //                    objectList.Add(new(objectFirstParam, (object)nestedObjectList));
-
-                    //        }
-                    //        else if (test.Current.ValueKind == JsonValueKind.Array)
-                    //        {
-                    //            Enumerate(test.Current, objectList, nestedCall);
-                    //        }
-                    //        else if (test.Current.ValueKind != JsonValueKind.Object && test.Current.ValueKind != JsonValueKind.Array && test.Current.ValueKind != JsonValueKind.Undefined)
-                    //        {
-                    //            //var test3 = Enum.GetValues(typeof(ParamTypeEnum));
-                    //            //foreach (var bla in test3)
-                    //            //{
-                    //            //    var testxxxxxxx = test.Current.GetProperty(Enum.GetName(typeof(ParamTypeEnum), bla));
-                    //            //    Console.WriteLine(testxxxxxxx.GetRawText());
-
-
-
-                    //            //}
-
-                    //            //var property = test.Current.GetProperty
-                    //        }
-                    //        else if (test.Current.ValueKind == JsonValueKind.Undefined)
-                    //        {
-                    //            //.WriteLine(test.Current.GetRawText());
-
-
-                    //        }
-                    //        else if (test.Current.ValueKind != JsonValueKind.Undefined)
-                    //        {
-                    //            Console.WriteLine(test.Current.ValueKind);
-                    //        }
-
-                    //    } while (test.MoveNext());
-
-                    //}
-                    //else if (element.ValueKind == JsonValueKind.String)
-                    //{
-                    //  //  var test = element.GetString();
-                    //    //foreach (var item in element.EnumerateArray())
-                    //    //{
-                    //    // //   keyValuePairs.Add(new(Enum.Parse<ParamTypeEnum>(item.), item.Value.GetRawText()));
-                    //    //}
-                    //        //string elementAsString = element.GetString();
-                    //        //var jsonEntriesTask = serializer.GetJsonEntries(elementAsString);
-                    //        //var jsonEntries = jsonEntriesTask.Result;
-
-                    //        //foreach(var entry in jsonEntries)
-                    //        //{
-                    //        //    Console.WriteLine(entry.toString());
-                    //        //}
-                    //        //foreach(var entry in jsonEntries)
-                    //        //{
-                    //        //    if(Enum.IsDefined(typeof(ParamTypeEnum), entry.Key))
-                    //        //    {
-                    //        //        keyValuePairs.Add(new(Enum.Parse<ParamTypeEnum>(entry.Key), entry.Value));
-                    //        //    }
-                    //        //}
-                    //    }
 
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-                return new List<List<(ParamTypeEnum, object)>>();
+                return null;
             }
             finally
             {
