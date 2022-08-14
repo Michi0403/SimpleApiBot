@@ -26,7 +26,7 @@ namespace HttpBotNet
             IDataFileExtension.Singleton.Instance.Serializer = new SimpleDataContractSerializer();
             StringExtension.Singleton.Instance.Serializer = new SimpleJsonSerializer();
                 Config cfg = new Config();
-            cfg = cfg.Load(cfg.SettingConfig.PathToThisConfig.TrimEnd('\\'));
+            cfg = cfg.Load(cfg.SettingConfig.PathToThisConfig);
 
             if (!File.Exists(@$"{cfg.SettingConfig.PathToCert.TrimEnd('\\')}"  ))
             {
@@ -81,7 +81,7 @@ namespace HttpBotNet
             //commandFactory.TryAddCommandToQueue(commandFactory.CreateCommand(ApiCommandEnum.SendText, HTTPMethodEnum.Get, sendMessageParameter.ToConcurrentDictionary()));
 
             cfg.CommandList = commandFactory.CommandQueue.Cast<CommandTemplate>().ToList();
-            cfg.Save(cfg.SettingConfig.PathToThisConfig.TrimEnd('\\')+ '\\' + "demoCfg.xml");
+            cfg.Save(cfg.SettingConfig.PathToThisConfig.TrimEnd('\\'));
             bool yeah = commandFactory.TryRunFullQueue();
             //var test = bot.BotResponseFactory.ResponseBag;
             Console.WriteLine(yeah.ToString());
