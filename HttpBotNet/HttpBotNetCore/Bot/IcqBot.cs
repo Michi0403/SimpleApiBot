@@ -142,12 +142,18 @@ namespace BotNetCore.Bot
             {
                 if(e.EventData != string.Empty)
                 {
-                    string fullpath = @$"{Config.SettingConfig.PathForHttpData}" + @$"\httpData\ResponseContent" + Path.GetRandomFileName() + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "")+ ".json";
+                    string fullpath = @$"{Config.SettingConfig.PathForHttpData}" + @$"\ResponseContent_" + Path.GetRandomFileName() + "_" + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "")+ ".json";
                     e.EventData.Save(fullpath);
                     var responseContentTask = StringExtension.DeserializeByteArrayToJSONDocumentAsync(e.EventData2);
+                    do
+                    {
+                        responseContentTask.Wait(1);
+                    }while(!responseContentTask.IsCompleted);
                     var responseContent = responseContentTask.Result;
+                    var response = _responsefactory.CreateResponseFromRequestAndJson(e.EventData, responseContent);
+                    bool success = _responsefactory.TryAddResponseToBag(response);
 
-                    _responsefactory.TryAddResponseToBag( _responsefactory.CreateResponseFromRequestAndJson(e.EventData, responseContent, IcqParamTypeEnum.events));
+                    Console.WriteLine($"ResponseContent added to Bag? {success}");
                     //DynamicResponse ResponseAsList = new DynamicResponse();
                     //foreach(var param in Enum.GetValues( typeof(ParamTypeResponeEnum)))
                     //{
@@ -168,7 +174,8 @@ namespace BotNetCore.Bot
             {
                 if (e.EventData != string.Empty)
                 {
-                    string fullpath = @$"{Config.SettingConfig.PathForHttpData}" + @$"\httpData\RequestContent" + Path.GetRandomFileName() + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "") + ".json";
+                    string fullpath = @$"{Config.SettingConfig.PathForHttpData}" + @$"\RequestContent_" + Path.GetRandomFileName() +"_"+ DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "") + ".json";
+       
                     e.EventData.Save(fullpath);
                     //var test = StringExtension.DeserializeAnonymousType(e.EventData,new { test = "" }).test;
                  
@@ -187,7 +194,7 @@ namespace BotNetCore.Bot
             {
                 if (e.EventData != null)
                 {
-                    string fullpath = @$"{Config.SettingConfig.PathForHttpData}" + @$"\httpData\Request" + Path.GetRandomFileName() + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "") + ".json";
+                    string fullpath = @$"{Config.SettingConfig.PathForHttpData}" + @$"\Request_" + Path.GetRandomFileName() + "_" + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "") + ".json";
                     
                     //var test = StringExtension.DeserializeAnonymousType(e.EventData,new { test = "" }).test;
                     var requestTask = StringExtension.DeserializeToJSONDocumentAsync(e.EventData);

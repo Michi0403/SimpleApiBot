@@ -1,15 +1,20 @@
 ﻿using BotNetCore.BusinessObjects.Enums.ApiCommandEnums;
+using BotNetCore.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace BotNetCore.Abstract
 {
-    public abstract class ComponentParam
+    [DataContract]
+    public abstract class ComponentParam : IDataFile
     {
+        [DataMember]
         public string value;
+        [DataMember]
         public ParamTypeEnum paramTypeEnum;
         public ComponentParam(ParamTypeEnum paramTypeEnum, string value)
         {

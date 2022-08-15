@@ -83,7 +83,7 @@ namespace BotNetCore.Abstract
             }
         }
 
-        public IBotResponse CreateResponseFromRequestAndJson(string requestHash, JsonDocument response, ParamTypeEnum objectFirstParam)
+        public IBotResponse CreateResponseFromRequestAndJson(string requestHash, JsonDocument response)
         {
             try
             {
@@ -92,7 +92,7 @@ namespace BotNetCore.Abstract
                 {
                     request = value;
                 }
-                ParamTypeEnumComposite responseContent = ParseJsonDocument(response, objectFirstParam);
+                ParamTypeEnumComposite responseContent = ParseJsonDocument(response);
 
                 IBotResponse returnRespond = new Response(request, responseContent);
                 return returnRespond;
@@ -113,7 +113,7 @@ namespace BotNetCore.Abstract
         /// <param name="objectFirstParam"></param>
         /// maybe unnecessary who knows
         /// <returns></returns>
-        private ParamTypeEnumComposite ParseJsonDocument(JsonDocument jsonDocument, ParamTypeEnum paramTypeEnum = null)
+        private ParamTypeEnumComposite ParseJsonDocument(JsonDocument jsonDocument)
         {
             try
             {
@@ -166,7 +166,7 @@ namespace BotNetCore.Abstract
                                 }
                                 else
                                 {
-                                    Console.WriteLine($"ParamTypeEnum {paramTypeEnum} not found! Skip");
+                                    Console.WriteLine($"ParamTypeEnum {jsonProperty.Name} not found! Skip");
                                 }
 
                             }
@@ -194,7 +194,7 @@ namespace BotNetCore.Abstract
                         default:
                             break;
                     }
-
+                    return;
                 }
             }
             catch (Exception ex)

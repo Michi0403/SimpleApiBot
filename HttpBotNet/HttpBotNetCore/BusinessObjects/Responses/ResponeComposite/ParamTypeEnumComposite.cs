@@ -1,15 +1,19 @@
 ﻿using BotNetCore.Abstract;
 using BotNetCore.BusinessObjects.Enums.ApiCommandEnums;
+using BotNetCore.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace BotNetCore.BusinessObjects.Responses.ResponeComposite
 {
-    public class ParamTypeEnumComposite : ComponentParam
+    [DataContract]
+    public class ParamTypeEnumComposite : ComponentParam , IDataFile
     {
+        [DataMember]
         List<ComponentParam> children = new List<ComponentParam>();
         public ParamTypeEnumComposite(ParamTypeEnum paramTypeEnum, string value) : base(paramTypeEnum, value)
         {

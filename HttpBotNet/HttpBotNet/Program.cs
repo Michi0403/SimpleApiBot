@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using BotNetCore.BusinessObjects.Enums.ApiCommandEnums;
 using BotNetCore.BusinessObjects.Enums.HttpEnums;
 using BotNetCore.Interfaces;
+using BotNetCore.BusinessObjects.Responses;
 
 namespace HttpBotNet
 {
@@ -56,8 +57,7 @@ namespace HttpBotNet
 
             if (commandFactory.CreateCommand((ApiCommandEnum)IcqApiCommandEnum.SendText, HttpMethodEnum.Get, parameter: parameter2) is IBotCommand botcommand4)
                 if (botcommand4 != null) commandFactory.TryAddCommandToQueue(botcommand4);
-
-
+            
             //Dictionary<ParamTypeEnum, string> sendMessageParameter = new Dictionary<ParamTypeEnum, string>()
             //{
             //    { IcqParamTypeEnum.chatId, "683705214@chat.agent" },
@@ -85,7 +85,19 @@ namespace HttpBotNet
             bool yeah = commandFactory.TryRunFullQueue();
             //var test = bot.BotResponseFactory.ResponseBag;
             Console.WriteLine(yeah.ToString());
+            var test = bot.BotResponseFactory.ResponseBag;
 
+            for (int counter = 0; counter < test.Count; counter++)
+            {
+                IBotResponse response = null;
+                test?.TryTake(out response);
+                var response2 = response as Response;
+                if (response2 != null)
+                    response2.Save(@$"{cfg.SettingConfig.PathForHttpData}" + @$"\ResponseFinal_" + Path.GetRandomFileName() + "_" + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "") + ".xml");
+
+            }
+
+                Console.WriteLine("yeayea");
 
             //Console.WriteLine(bot.BotResponseFactory.ResponseBag.ToString());
             Console.ReadLine();

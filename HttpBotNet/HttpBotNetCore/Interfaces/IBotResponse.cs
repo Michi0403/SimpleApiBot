@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BotNetCore.Interfaces
 {
-    public interface IBotResponse
+    public interface IBotResponse : IDataFile
     {
         public ParamTypeEnumComposite Request
         {

@@ -19,7 +19,6 @@ namespace BotNetCore.Abstract
 
         [DataMember]
         protected string _routeBaseAdress;
-
         protected HttpMethod HttpMethod { get; set; }
 
 

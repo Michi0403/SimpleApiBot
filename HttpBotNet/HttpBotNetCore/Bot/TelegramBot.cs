@@ -145,9 +145,19 @@ namespace BotNetCore.Bot
                     string fullpath = @$"{Config.SettingConfig.PathForHttpData}" + @$"\httpData\ResponseContent" + Path.GetRandomFileName() + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "")+ ".json";
                     e.EventData.Save(fullpath);
                     var responseContentTask = StringExtension.DeserializeByteArrayToJSONDocumentAsync(e.EventData2);
+                    int counter = 0;
+                    do
+                    {
+                        counter++;
+                        responseContentTask.Wait(1);
+                        if (counter % 5000 == 0)
+                        {
+                            throw new TimeoutException("Deserializing failed of " + e.EventData2.ToString());
+                        }
+                    } while (!responseContentTask.IsCompleted);
                     var responseContent = responseContentTask.Result;
 
-                    _responsefactory.TryAddResponseToBag( _responsefactory.CreateResponseFromRequestAndJson(e.EventData, responseContent, IcqParamTypeEnum.events));
+                    _responsefactory.TryAddResponseToBag( _responsefactory.CreateResponseFromRequestAndJson(e.EventData, responseContent));
                     //DynamicResponse ResponseAsList = new DynamicResponse();
                     //foreach(var param in Enum.GetValues( typeof(ParamTypeResponeEnum)))
                     //{
