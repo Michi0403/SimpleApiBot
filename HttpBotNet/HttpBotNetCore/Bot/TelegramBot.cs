@@ -143,11 +143,11 @@ namespace BotNetCore.Bot
             {
                 if(e.EventData != string.Empty)
                 {
-                    string fullpath = @$"{Config.SettingConfig.PathForHttpData}" + @$"\httpData\ResponseContent" + Path.GetRandomFileName() + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "")+ ".json";
+                    string fullpath = @$"{Config.SettingConfig.PathForHttpData}".TrimEnd('\\') + '\\' + Path.GetRandomFileName() + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "")+ ".json";
                     e.EventData.Save(fullpath);
                     var responseContentTask = StringExtension.DeserializeByteArrayToJSONDocumentAsync(e.EventData2);
                     int counter = 0;
-                    do
+                    while (!responseContentTask.IsCompleted)
                     {
                         counter++;
                         responseContentTask.Wait(1);
@@ -155,7 +155,7 @@ namespace BotNetCore.Bot
                         {
                             throw new TimeoutException("Deserializing failed of " + e.EventData2.ToString());
                         }
-                    } while (!responseContentTask.IsCompleted);
+                    }
                     var responseContent = responseContentTask.Result;
 
                     _responsefactory.TryAddResponseToBag( _responsefactory.CreateResponseFromRequestAndJson(e.EventData, responseContent));

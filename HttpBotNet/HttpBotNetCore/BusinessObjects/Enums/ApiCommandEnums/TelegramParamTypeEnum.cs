@@ -72,6 +72,70 @@ namespace BotNetCore.BusinessObjects.Enums.ApiCommandEnums
         [DataMember]
         public static readonly TelegramParamTypeEnum result = new TelegramParamTypeEnum("result");
 
+        [DataMember]
+        public static readonly TelegramParamTypeEnum chat_id = new TelegramParamTypeEnum("chat_id");
+
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum text = new TelegramParamTypeEnum("text");
+
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum parse_mode = new TelegramParamTypeEnum("parse_mode");
+
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum entities = new TelegramParamTypeEnum("entities");
+
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum disable_web_page_preview = new TelegramParamTypeEnum("disable_web_page_preview");
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum disable_notification = new TelegramParamTypeEnum("disable_notification");
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum protect_content = new TelegramParamTypeEnum("protect_content");
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum reply_to_message_id = new TelegramParamTypeEnum("reply_to_message_id");
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum allow_sending_without_reply = new TelegramParamTypeEnum("allow_sending_without_reply");
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum reply_markup = new TelegramParamTypeEnum("reply_markup");
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum from_chat_id = new TelegramParamTypeEnum("from_chat_id");
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum message_id = new TelegramParamTypeEnum("message_id");
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum caption = new TelegramParamTypeEnum("caption");
+
+        //[DataMember]
+        //public static readonly TelegramParamTypeEnum caption = new TelegramParamTypeEnum("caption");
+
+        //[DataMember]
+        //public static readonly TelegramParamTypeEnum caption = new TelegramParamTypeEnum("caption");
+
+        //[DataMember]
+        //public static readonly TelegramParamTypeEnum caption = new TelegramParamTypeEnum("caption");
+
+        //[DataMember]
+        //public static readonly TelegramParamTypeEnum caption = new TelegramParamTypeEnum("caption");
+
+        //[DataMember]
+        //public static readonly TelegramParamTypeEnum caption = new TelegramParamTypeEnum("caption");
+
+        //[DataMember]
+        //public static readonly TelegramParamTypeEnum caption = new TelegramParamTypeEnum("caption");
+
+        //[DataMember]
+        //public static readonly TelegramParamTypeEnum caption = new TelegramParamTypeEnum("caption");
+
         public TelegramParamTypeEnum(string value) : base(value)
         {
         }

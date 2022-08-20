@@ -14,6 +14,12 @@ namespace BotNetCore.BusinessObjects.Enums.ApiCommandEnums
     {
         [DataMember, CommandAttribute(typeof(Commands.TelegramCommands.getMe))]
         public static readonly TelegramApiCommandEnum getMe = new TelegramApiCommandEnum("getMe");
+
+        [DataMember, CommandAttribute(typeof(Commands.TelegramCommands.sendMessage))]
+        public static readonly TelegramApiCommandEnum sendMessage = new TelegramApiCommandEnum("sendMessage");
+
+        [DataMember, CommandAttribute(typeof(Commands.TelegramCommands.getUpdates))]
+        public static readonly TelegramApiCommandEnum getUpdates = new TelegramApiCommandEnum("getUpdates");
         public TelegramApiCommandEnum(string value) : base(value)
         {
         }

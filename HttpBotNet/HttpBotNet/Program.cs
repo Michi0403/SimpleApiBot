@@ -71,6 +71,16 @@ namespace HttpBotNet
                 if (commandFactory.CreateCommand((ApiCommandEnum)TelegramApiCommandEnum.getMe, HttpMethodEnum.Get, parameter: parameter) is IBotCommand botcommand2)
                     if (botcommand2 != null) commandFactory.TryAddCommandToQueue(botcommand2);
 
+                //Dictionary<ParamTypeEnum, string> sendmessagetest = new Dictionary<ParamTypeEnum, string>() { { TelegramParamTypeEnum.chat_id, "2" }, {TelegramParamTypeEnum.text, "Deine Mutter" };
+                //ConcurrentDictionary<ParamTypeEnum, string> paramsendmessage = new ConcurrentDictionary<ParamTypeEnum, string>(sendmessagetest);
+                //if (commandFactory.CreateCommand((ApiCommandEnum)TelegramApiCommandEnum.sendMessage, HttpMethodEnum.Get, parameter: parameter) is IBotCommand botcommand3)
+                //    if (botcommand3 != null) commandFactory.TryAddCommandToQueue(botcommand3);
+
+                Dictionary<ParamTypeEnum, string> testgetupdates = new Dictionary<ParamTypeEnum, string>() { };
+                ConcurrentDictionary<ParamTypeEnum, string> getupdatesparams = new ConcurrentDictionary<ParamTypeEnum, string>(testgetupdates);
+                if (commandFactory.CreateCommand((ApiCommandEnum)TelegramApiCommandEnum.getUpdates, HttpMethodEnum.Get, parameter: parameter) is IBotCommand botcommand4)
+                    if (botcommand4 != null) commandFactory.TryAddCommandToQueue(botcommand4 );
+
                 telegramCfg.Save(telegramCfg.SettingConfig.PathToThisConfig.TrimEnd('\\'));
                 bool yeah = commandFactory.TryRunFullQueue(true);
 
@@ -90,7 +100,9 @@ namespace HttpBotNet
 
                 //Test for deserialization of responses
                 List<IBotResponse> deserializedResponses = new List<IBotResponse>();
-                var httpresponsesAndSoOnWhatever = Directory.GetFiles(@$"{telegramCfg.SettingConfig.PathForHttpData}",".xml");
+                    GeneralHelper.TryCreateDirectoryForThisFile(
+                    telegramCfg.SettingConfig.PathForHttpData.TrimEnd('\\') + '\\');
+                var httpresponsesAndSoOnWhatever = Directory.GetFiles(@$"{telegramCfg.SettingConfig.PathForHttpData.TrimEnd('\\')}" + '\\',"*.xml");
                 foreach (string pathOfFile in httpresponsesAndSoOnWhatever)
                 {
                     try
@@ -171,7 +183,7 @@ namespace HttpBotNet
 
                 //Test for deserialization of responses
                 List<IBotResponse> deserializedResponses = new List<IBotResponse>();
-                var httpresponsesAndSoOnWhatever = Directory.GetFiles(@$"{cfg.SettingConfig.PathForHttpData}", ".xml");
+                var httpresponsesAndSoOnWhatever = Directory.GetFiles(@$"{cfg.SettingConfig.PathForHttpData}", "*.xml");
                 foreach (string pathOfFile in httpresponsesAndSoOnWhatever)
                 {
                     try
