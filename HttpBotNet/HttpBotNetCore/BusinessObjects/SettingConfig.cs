@@ -14,6 +14,7 @@ namespace BotNetCore.BusinessObjects
         /// Token from Metabot in Icq
         /// </summary>
         [DataMember]
+        public string Token = @"001.1641191746.0491355346:760774823";
         /// <summary>
         /// Optional BotId
         /// </summary>
