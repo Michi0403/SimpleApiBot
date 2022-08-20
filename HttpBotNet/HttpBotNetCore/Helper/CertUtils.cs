@@ -23,7 +23,7 @@ namespace BotNetCore.Helper
         public static void MakeCert(string path, string filename, string password)
         {
             var ecdsa = ECDsa.Create(); // generate asymmetric key pair
-            var req = new CertificateRequest("cn=netIcqbot", ecdsa, HashAlgorithmName.SHA256);
+            var req = new CertificateRequest("cn=HttpBotNetCore", ecdsa, HashAlgorithmName.SHA256);
             var cert = req.CreateSelfSigned(DateTimeOffset.UtcNow, DateTimeOffset.Now.AddYears(5));
 
             if(string.IsNullOrEmpty(path)) path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
