@@ -18,6 +18,7 @@ using BotNetCore.BusinessObjects.Enums.HttpEnums;
 using BotNetCore.Interfaces;
 using BotNetCore.BusinessObjects.Responses;
 using System.Threading;
+using BotNetCore.BusinessObjects.Responses.ResponeComposite;
 
 namespace HttpBotNet
 {
@@ -47,7 +48,7 @@ namespace HttpBotNet
                 telegramCfg.SettingConfig.PathToThisConfig= Directory.GetCurrentDirectory().TrimEnd('\\')+ '\\'+"telegramConfig.xml";
                 telegramCfg.SettingConfig.PathToCert = telegramCfg.SettingConfig.PathToCert.TrimEnd('\\') + '\\' + "telegramCert\\";
                 telegramCfg.SettingConfig.CertFileName = "TelegramBotXCertFile";
-                telegramCfg.SettingConfig.Token = "xxxx";
+                telegramCfg.SettingConfig.Token = "5770786080:AAG-kPT7qEVS2wM_Eb0tz4Lyg-qFmyd1uEQ";
                 telegramCfg.SettingConfig.PathForHttpData= telegramCfg.SettingConfig.PathToCert.TrimEnd('\\') + '\\' + "telegramPathForHttpData\\";
                 telegramCfg.SettingConfig.ApiRoute = @"https://api.telegram.org/";
                 File.Delete(telegramCfg.SettingConfig.PathToThisConfig);
@@ -71,10 +72,10 @@ namespace HttpBotNet
                 if (commandFactory.CreateCommand((ApiCommandEnum)TelegramApiCommandEnum.getMe, HttpMethodEnum.Get, parameter: parameter) is IBotCommand botcommand2)
                     if (botcommand2 != null) commandFactory.TryAddCommandToQueue(botcommand2);
 
-                //Dictionary<ParamTypeEnum, string> sendmessagetest = new Dictionary<ParamTypeEnum, string>() { { TelegramParamTypeEnum.chat_id, "2" }, {TelegramParamTypeEnum.text, "Deine Mutter" };
-                //ConcurrentDictionary<ParamTypeEnum, string> paramsendmessage = new ConcurrentDictionary<ParamTypeEnum, string>(sendmessagetest);
-                //if (commandFactory.CreateCommand((ApiCommandEnum)TelegramApiCommandEnum.sendMessage, HttpMethodEnum.Get, parameter: parameter) is IBotCommand botcommand3)
-                //    if (botcommand3 != null) commandFactory.TryAddCommandToQueue(botcommand3);
+                Dictionary<ParamTypeEnum, string> sendmessagetest = new Dictionary<ParamTypeEnum, string>(){ { TelegramParamTypeEnum.chat_id, "@Michael Flesh" }, { TelegramParamTypeEnum.text, "Haha" } };
+                ConcurrentDictionary<ParamTypeEnum, string> paramsendmessage = new ConcurrentDictionary<ParamTypeEnum, string>(sendmessagetest);
+                if (commandFactory.CreateCommand((ApiCommandEnum)TelegramApiCommandEnum.sendMessage, HttpMethodEnum.Get, parameter: parameter) is IBotCommand botcommand3)
+                    if (botcommand3 != null) commandFactory.TryAddCommandToQueue(botcommand3);
 
                 Dictionary<ParamTypeEnum, string> testgetupdates = new Dictionary<ParamTypeEnum, string>() { };
                 ConcurrentDictionary<ParamTypeEnum, string> getupdatesparams = new ConcurrentDictionary<ParamTypeEnum, string>(testgetupdates);
@@ -117,6 +118,35 @@ namespace HttpBotNet
                 }
 
                 Console.WriteLine("Deserialized : " + deserializedResponses.Count + " Responses");
+
+                Console.WriteLine("Seek for /IchBrauchAufmerksamKeit");
+                List<(ParamTypeEnum, string)> ListOfMessages = new List<(ParamTypeEnum, string)>();
+                foreach(var messagesInResponse in deserializedResponses)
+                {
+                    //var compositesInResponse = messagesInResponse.Response.ReturnValue();
+
+                    List<ComponentParam> responseChildren = messagesInResponse.Response.children;
+                    foreach(ParamTypeEnumComposite componentParam in responseChildren.Where(x=> x is ParamTypeEnumComposite).ToList())
+                    {
+                        Console.WriteLine("found ComponentParam");
+                        foreach(var childrenOfRoot in componentParam.children)
+                        {
+                            Console.WriteLine(childrenOfRoot.ToString());
+                        }
+                        Console.WriteLine(componentParam.ToString());
+                    }
+                    //foreach(var composite in compositesInResponse.Where(x => x.Item2.Contains("/IchBraucheAufmerksamkeit")).ToList())
+                    //{
+                    //    Console.WriteLine("Found /IchBrauchAufmerksamkeit in "+ composite.ToString());
+                    //    ListOfMessages.Add(composite);
+                    //}
+                    //foreach (var entry in messagesInResponse.Response.ReturnValue().Where(x => x.Item1 == TelegramParamTypeEnum.text && x.Item2.Contains("/IchBrauchAufmerksamkeit")))
+                    //{
+                    //    ListOfMessages.Add(entry);
+                    //}
+                }
+
+                foreach(var entry in ListOfMessages) Console.WriteLine(entry.ToString());
                 Console.WriteLine("Telegram Implementation ended here");
             }
             catch (Exception ex)

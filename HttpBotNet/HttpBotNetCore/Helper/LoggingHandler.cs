@@ -40,21 +40,38 @@ namespace BotNetCore.Helper
                 Console.WriteLine();
 
                 HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
-
-                Console.WriteLine(response.ToString());
-                response.EnsureSuccessStatusCode();
+                try
+                {
+                    if(response.IsSuccessStatusCode)
+                    {
+                        Console.WriteLine("request was a success");
+                    }
+                    else
+                    {
+                        Console.WriteLine("response failed, httpstatus: "+response.StatusCode);
+                    }
+                    Console.WriteLine(response.ToString());
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Response shows Request failed");
+                    Console.WriteLine(ex.ToString());
+                }
+                
                 if (response.Content != null)
                 {
                     if (_onResponseContentAvailable != null)
                         _onResponseContentAvailable(this, new GenericEventArgs<string, byte[]>(request.GetHashCode().ToString(), await response.Content.ReadAsByteArrayAsync()));
                     //Console.WriteLine(await response.Content.ReadAsStringAsync());
                 }
-                Console.WriteLine($"Response: Success? => {response.IsSuccessStatusCode}");
-                Console.WriteLine($"Response: HttpStatuscode? => {response.StatusCode}");
-                Console.WriteLine($"RequestMessageToResponse? => {response.RequestMessage}");
-                Console.WriteLine(await response.Content.ReadAsStringAsync());
-                Console.WriteLine();
-
+                if(response!=null)
+                {
+                    Console.WriteLine($"Response: Success? => {response.IsSuccessStatusCode}");
+                    Console.WriteLine($"Response: HttpStatuscode? => {response.StatusCode}");
+                    Console.WriteLine($"RequestMessageToResponse? => {response.RequestMessage}");
+                    Console.WriteLine(await response.Content.ReadAsStringAsync());
+                    Console.WriteLine();
+                }
                 return response;
             }
             catch (Exception ex)

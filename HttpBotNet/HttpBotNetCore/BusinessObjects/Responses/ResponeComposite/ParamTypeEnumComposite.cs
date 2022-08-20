@@ -14,7 +14,7 @@ namespace BotNetCore.BusinessObjects.Responses.ResponeComposite
     public class ParamTypeEnumComposite : ComponentParam , IDataFile
     {
         [DataMember]
-        List<ComponentParam> children = new List<ComponentParam>();
+        public List<ComponentParam> children = new List<ComponentParam>();
         public ParamTypeEnumComposite(ParamTypeEnum paramTypeEnum, string value) : base(paramTypeEnum, value)
         {
 

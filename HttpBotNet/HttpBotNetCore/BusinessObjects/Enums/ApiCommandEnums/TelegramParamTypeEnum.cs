@@ -115,27 +115,78 @@ namespace BotNetCore.BusinessObjects.Enums.ApiCommandEnums
         [DataMember]
         public static readonly TelegramParamTypeEnum caption = new TelegramParamTypeEnum("caption");
 
-        //[DataMember]
-        //public static readonly TelegramParamTypeEnum caption = new TelegramParamTypeEnum("caption");
+        [DataMember]
+        public static readonly TelegramParamTypeEnum Skip = new TelegramParamTypeEnum("Skip");
 
-        //[DataMember]
-        //public static readonly TelegramParamTypeEnum caption = new TelegramParamTypeEnum("caption");
+        [DataMember]
+        public static readonly TelegramParamTypeEnum description = new TelegramParamTypeEnum("description");
 
-        //[DataMember]
-        //public static readonly TelegramParamTypeEnum caption = new TelegramParamTypeEnum("caption");
+        [DataMember]
+        public static readonly TelegramParamTypeEnum error_code = new TelegramParamTypeEnum("error_code");
 
-        //[DataMember]
-        //public static readonly TelegramParamTypeEnum caption = new TelegramParamTypeEnum("caption");
+        [DataMember]
+        public static readonly TelegramParamTypeEnum update_id = new TelegramParamTypeEnum("update_id");
 
-        //[DataMember]
-        //public static readonly TelegramParamTypeEnum caption = new TelegramParamTypeEnum("caption");
+        [DataMember]
+        public static readonly TelegramParamTypeEnum last_name = new TelegramParamTypeEnum("last_name");
 
-        //[DataMember]
-        //public static readonly TelegramParamTypeEnum caption = new TelegramParamTypeEnum("caption");
+        [DataMember]
+        public static readonly TelegramParamTypeEnum language_code = new TelegramParamTypeEnum("language_code");
 
-        //[DataMember]
-        //public static readonly TelegramParamTypeEnum caption = new TelegramParamTypeEnum("caption");
+        [DataMember]
+        public static readonly TelegramParamTypeEnum from = new TelegramParamTypeEnum("from");
 
+        [DataMember]
+        public static readonly TelegramParamTypeEnum type = new TelegramParamTypeEnum("type");
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum chat = new TelegramParamTypeEnum("chat");
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum date = new TelegramParamTypeEnum("date");
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum offset = new TelegramParamTypeEnum("offset");
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum length = new TelegramParamTypeEnum("length");
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum message = new TelegramParamTypeEnum("message");
+
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum title = new TelegramParamTypeEnum("title");
+
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum all_members_are_administrators = new TelegramParamTypeEnum("all_members_are_administrators");
+
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum user = new TelegramParamTypeEnum("user");
+
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum status = new TelegramParamTypeEnum("status");
+
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum old_chat_member = new TelegramParamTypeEnum("old_chat_member");
+
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum new_chat_member = new TelegramParamTypeEnum("new_chat_member");
+
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum my_chat_member = new TelegramParamTypeEnum("my_chat_member");
+        
+
+        [DataMember]
+        public static readonly TelegramParamTypeEnum new_chat_participant = new TelegramParamTypeEnum("new_chat_participant");
+        [DataMember]
+        public static readonly TelegramParamTypeEnum new_chat_members = new TelegramParamTypeEnum("new_chat_members");
         public TelegramParamTypeEnum(string value) : base(value)
         {
         }
