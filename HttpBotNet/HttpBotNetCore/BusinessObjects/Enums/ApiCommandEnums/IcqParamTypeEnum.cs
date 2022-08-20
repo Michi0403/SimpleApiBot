@@ -158,7 +158,7 @@ namespace BotNetCore.BusinessObjects.Enums.ApiCommandEnums
         [DataMember]
         public static readonly IcqParamTypeEnum MinorRevision = new IcqParamTypeEnum("MinorRevision");
         [DataMember]
-        public static readonly IcqParamTypeEnum Value = new IcqParamTypeEnum("Value");
+        public static readonly new IcqParamTypeEnum Value = new IcqParamTypeEnum("Value");
         [DataMember]
         public static readonly IcqParamTypeEnum Version = new IcqParamTypeEnum("Version");
         [DataMember]

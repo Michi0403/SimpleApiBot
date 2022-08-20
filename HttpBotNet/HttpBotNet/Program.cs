@@ -40,6 +40,8 @@ namespace HttpBotNet
         {
             try
             {
+                IDataFileExtension.Singleton.Instance.Serializer = new SimpleDataContractSerializer();
+                StringExtension.Singleton.Instance.Serializer = new SimpleJsonSerializer();
                 Config telegramCfg = new Config();
                 telegramCfg.SettingConfig.Nick = "@iLikeToFartBot";
                 telegramCfg.SettingConfig.PathToThisConfig= Directory.GetCurrentDirectory().TrimEnd('\\')+ '\\'+"telegramConfig.xml";
@@ -47,10 +49,9 @@ namespace HttpBotNet
                 telegramCfg.SettingConfig.CertFileName = "TelegramBotXCertFile";
                 telegramCfg.SettingConfig.Token = "xxxx";
                 telegramCfg.SettingConfig.PathForHttpData= telegramCfg.SettingConfig.PathToCert.TrimEnd('\\') + '\\' + "telegramPathForHttpData\\";
-                    telegramCfg.SettingConfig.ApiRoute = @"https://api.telegram.org/";
-
+                telegramCfg.SettingConfig.ApiRoute = @"https://api.telegram.org/";
+                File.Delete(telegramCfg.SettingConfig.PathToThisConfig);
                 telegramCfg.Save(telegramCfg.SettingConfig.PathToThisConfig);
-                telegramCfg = telegramCfg.Load(telegramCfg.SettingConfig.PathToThisConfig);
                 if (!File.Exists(@$"{telegramCfg.SettingConfig.PathToCert.TrimEnd('\\') + '\\' + telegramCfg.SettingConfig.CertFileName + ".pfx"}"))
                 {
                     Console.WriteLine("Create and Store SSL Certificate");
@@ -89,7 +90,7 @@ namespace HttpBotNet
 
                 //Test for deserialization of responses
                 List<IBotResponse> deserializedResponses = new List<IBotResponse>();
-                var httpresponsesAndSoOnWhatever = Directory.GetFiles(@$"{telegramCfg.SettingConfig.PathForHttpData}");
+                var httpresponsesAndSoOnWhatever = Directory.GetFiles(@$"{telegramCfg.SettingConfig.PathForHttpData}",".xml");
                 foreach (string pathOfFile in httpresponsesAndSoOnWhatever)
                 {
                     try
@@ -103,7 +104,7 @@ namespace HttpBotNet
                     }
                 }
 
-
+                Console.WriteLine("Deserialized : " + deserializedResponses.Count + " Responses");
                 Console.WriteLine("Telegram Implementation ended here");
             }
             catch (Exception ex)
@@ -170,7 +171,7 @@ namespace HttpBotNet
 
                 //Test for deserialization of responses
                 List<IBotResponse> deserializedResponses = new List<IBotResponse>();
-                var httpresponsesAndSoOnWhatever = Directory.GetFiles(@$"{cfg.SettingConfig.PathForHttpData}");
+                var httpresponsesAndSoOnWhatever = Directory.GetFiles(@$"{cfg.SettingConfig.PathForHttpData}", ".xml");
                 foreach (string pathOfFile in httpresponsesAndSoOnWhatever)
                 {
                     try

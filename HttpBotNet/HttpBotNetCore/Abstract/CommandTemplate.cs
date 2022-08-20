@@ -54,14 +54,23 @@ namespace BotNetCore.Abstract
 
         public override string ToString()
         {
-
-            StringBuilder fullUrl = new StringBuilder();
-            fullUrl.Append(_httpClient.BaseAddress.OriginalString.TrimEnd('/') + '/' + _routeBaseAdress.TrimEnd('/').TrimStart('/') + '?');
-            foreach (KeyValuePair<ParamTypeEnum, string> entry in Parameter)
+            try
             {
-                fullUrl.Append(entry.Key.Value + '=' + entry.Value +'&');
+                StringBuilder fullUrl = new StringBuilder();
+                fullUrl.Append(_httpClient.BaseAddress.OriginalString.TrimEnd('/') + '/' + _routeBaseAdress.TrimEnd('/').TrimStart('/') + '?');
+                foreach (KeyValuePair<ParamTypeEnum, string> entry in Parameter)
+                {
+                    fullUrl.Append(entry.Key.Value + '=' + entry.Value + '&');
+                }
+                return fullUrl.ToString().TrimEnd('&');
             }
-            return fullUrl.ToString().TrimEnd('&');
+            catch (Exception ex)
+            {
+                Console.WriteLine("CommandTemplate ToString() failed");
+                Console.WriteLine(ex.ToString());
+                return String.Empty;
+            }
+           
         }
     }
 }

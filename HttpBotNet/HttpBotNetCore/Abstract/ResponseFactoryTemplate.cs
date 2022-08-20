@@ -60,29 +60,6 @@ namespace BotNetCore.Abstract
             }
         }
 
-        public ParamTypeEnumComposite GetListOfContainedParams(IBotResponse response,IcqParamTypeEnum param)
-        {
-            try
-            {
-                ParamTypeEnumComposite returnList = null;
-
-                //TODO Overwork
-                Console.WriteLine("Whatever is written here doesn't work right now");
-
-                    //foreach(var list in response.Request.Intersect(response.Response) )
-                    //{
-                    //   returnList.AddRange((List<(IcqParamTypeEnum, object)>)list.Where(x => (IcqParamTypeEnum)x.Item1== param).Select(y => y));
-                //}
-                //return returnList;
-                return returnList;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                return null;
-            }
-        }
-
         public IBotResponse CreateResponseFromRequestAndJson(string requestHash, JsonDocument response)
         {
             try
@@ -113,7 +90,7 @@ namespace BotNetCore.Abstract
         /// <param name="objectFirstParam"></param>
         /// maybe unnecessary who knows
         /// <returns></returns>
-        private ParamTypeEnumComposite ParseJsonDocument(JsonDocument jsonDocument)
+        protected virtual ParamTypeEnumComposite ParseJsonDocument(JsonDocument jsonDocument)
         {
             try
             {

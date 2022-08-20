@@ -97,7 +97,6 @@ namespace BotNetCore.Factories
             {
                 //TODO 
                 throw new NotImplementedException();
-                return true;
             }
             catch (Exception ex)
             {

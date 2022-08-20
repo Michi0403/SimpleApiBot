@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace BotNetCore.BusinessObjects.Commands.TelegramCommands
 {
     [DataContract ]
-    public class getMe : CommandTemplate
+    public class getMe : TelegramCommandTemplate
     {
         public getMe(HttpClient client, string token, Dictionary<ParamTypeEnum, string> parameter, string httpMethod) : base(client, token, parameter, httpMethod) 
         {

@@ -59,10 +59,11 @@ namespace BotNetCore.Bot
 
                 if (_httpClient == null)
                 {
-                    if (_config != null)
-                        _config = config;
-                    else
-                        _config = new Config();
+                        if(_config != null && config != null)
+                            _config = config;
+                    else if(_config == null && config != null)
+                            _config = config;
+                    else if(_config == null) _config = new Config();
                     _handler = new HttpClientHandler();
 
                     _handler.ClientCertificates.Add(new X509Certificate2(@$"{    _config.SettingConfig.PathToCert.TrimEnd('\\') + '\\' + _config.SettingConfig.CertFileName + ".pfx"}",
