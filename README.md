@@ -11,3 +11,10 @@ Intention for this was to build a adaptable .net Api runner (bot) with these fea
 It's nothing special but, I like it :)
 
 There are a lot naming issues and so on but it's production code so I am "Pretty Sowwy"
+
+What works
+Serialize and Deserialization of Commands and Responses -> maps to own implementable ENUM System
+
+Todo:
+A lot, I wrote a lot code in the implementation of the single api "adapters" I am focused on refactoring it and make everything always more generic and dynamically
+And by the way a automatic generation of enums and maybe later commands is planned + ready to use Cronjob features.
