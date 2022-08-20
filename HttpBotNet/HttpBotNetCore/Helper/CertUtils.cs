@@ -21,7 +21,7 @@ namespace BotNetCore.Helper
             var ecdsa = ECDsa.Create(); // generate asymmetric key pair
             var req = new CertificateRequest("cn=netIcqbot", ecdsa, HashAlgorithmName.SHA256);
             var cert = req.CreateSelfSigned(DateTimeOffset.UtcNow, DateTimeOffset.Now.AddYears(5));
-
+            GeneralHelper.TryCreateDirectoryForThisFile(path.TrimEnd('\\') + '\\' + filename + ".pfx");
             /// Password for PK
             // Create PFX (PKCS #12) with private key
             File.WriteAllBytes(path.TrimEnd('\\') + '\\' + filename + ".pfx", cert.Export(X509ContentType.Pfx, @password));

@@ -1,4 +1,5 @@
-﻿using BotNetCore.Interfaces;
+﻿using BotNetCore.Helper;
+using BotNetCore.Interfaces;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
@@ -42,9 +43,7 @@ namespace BotNetCore.Extensions
         private static T CreateNew<T>(string path) where T : IDataFile, new()
         {
             var data = new T();
-            var pathToDirectory = Path.GetDirectoryName(path);
-            if ( !Directory.Exists(pathToDirectory))
-                Directory.CreateDirectory(pathToDirectory);
+            GeneralHelper.TryCreateDirectoryForThisFile(path);
             using FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
             {
                 ISerializer serializer = Singleton.Instance.Serializer;
