@@ -72,7 +72,9 @@ namespace BotNetCore.Bot
                     _handler.ClientCertificateOptions = ClientCertificateOption.Automatic;
 
                     _loggingHandler = new LoggingHandler(_handler);
-
+                    _loggingHandler.OnRequestAvailable -= RequestIncoming;
+                    _loggingHandler.OnRequestContentAvailable -= RequestContentIncoming;
+                    _loggingHandler.OnResponseContentAvailable -= ResponseContentIncoming;
                     _loggingHandler.OnRequestContentAvailable += RequestContentIncoming;
                     _loggingHandler.OnResponseContentAvailable += ResponseContentIncoming;
                     _loggingHandler.OnRequestAvailable += RequestIncoming;

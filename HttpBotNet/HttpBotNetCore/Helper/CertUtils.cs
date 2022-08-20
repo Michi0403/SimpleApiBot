@@ -16,13 +16,13 @@ namespace BotNetCore.Helper
         /// <param name="filename"></param>
         /// Filename for Cert and PK
         /// <param name="password"></param>
-        /// Password for PK
         public static void MakeCert(string path, string filename, string password)
         {
             var ecdsa = ECDsa.Create(); // generate asymmetric key pair
             var req = new CertificateRequest("cn=netIcqbot", ecdsa, HashAlgorithmName.SHA256);
             var cert = req.CreateSelfSigned(DateTimeOffset.UtcNow, DateTimeOffset.Now.AddYears(5));
 
+            /// Password for PK
             // Create PFX (PKCS #12) with private key
             File.WriteAllBytes(path.TrimEnd('\\') + '\\' + filename + ".pfx", cert.Export(X509ContentType.Pfx, @password));
 

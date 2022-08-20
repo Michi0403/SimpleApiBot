@@ -17,6 +17,7 @@ using BotNetCore.BusinessObjects.Enums.ApiCommandEnums;
 using BotNetCore.BusinessObjects.Enums.HttpEnums;
 using BotNetCore.Interfaces;
 using BotNetCore.BusinessObjects.Responses;
+using System.Threading;
 
 namespace HttpBotNet
 {
@@ -29,7 +30,7 @@ namespace HttpBotNet
                 Config cfg = new Config();
             cfg = cfg.Load(cfg.SettingConfig.PathToThisConfig);
 
-            if (!File.Exists(@$"{cfg.SettingConfig.PathToCert.TrimEnd('\\')}"  ))
+            if (!File.Exists(@$"{cfg.SettingConfig.PathToCert.TrimEnd('\\') + '\\' + cfg.SettingConfig.CertFileName + ".pfx"}"  ))
             {
                 Console.WriteLine("Create and Store SSL Certificate");
                 CertificateUtil.MakeCert(cfg.SettingConfig.PathToCert, cfg.SettingConfig.CertFileName, cfg.SettingConfig.PasswordForPK);
@@ -80,10 +81,11 @@ namespace HttpBotNet
 
             //commandFactory.TryAddCommandToQueue(commandFactory.CreateCommand(ApiCommandEnum.SendText, HTTPMethodEnum.Get, sendMessageParameter.ToConcurrentDictionary()));
 
-            cfg.CommandList = commandFactory.CommandQueue.Cast<CommandTemplate>().ToList();
             cfg.Save(cfg.SettingConfig.PathToThisConfig.TrimEnd('\\'));
             bool yeah = commandFactory.TryRunFullQueue(true);
-            //var test = bot.BotResponseFactory.ResponseBag;
+
+                //var test = bot.BotResponseFactory.ResponseBag;
+            Thread.Sleep(10000);
             Console.WriteLine(yeah.ToString());
             var test = bot.BotResponseFactory.ResponseBag;
 
@@ -97,10 +99,10 @@ namespace HttpBotNet
 
             }
 
-                Console.WriteLine("yeayea");
+
+            Console.WriteLine("Command Line Implementation ended here");
 
             //Console.WriteLine(bot.BotResponseFactory.ResponseBag.ToString());
-            Console.ReadLine();
         }
     }
 }

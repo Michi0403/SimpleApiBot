@@ -20,42 +20,49 @@ namespace BotNetCore.Helper
         private event EventHandler<GenericEventArgs<HttpRequestMessage>> _onRequestAvailable;
         private event EventHandler<GenericEventArgs<string>> _onRequestContentAvailable;
         private event EventHandler<GenericEventArgs<string,byte[]>> _onResponseContentAvailable;
-
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            Console.WriteLine("Request:");
+            try
+            {
+                Console.WriteLine("Request:");
                 Console.WriteLine($"RequestUri:{request.RequestUri}");
-            Console.WriteLine(request.ToString());
+                Console.WriteLine(request.ToString());
 
-            if(request != null)
-                if (_onRequestAvailable != null)
-                    _onRequestAvailable(this, new GenericEventArgs<HttpRequestMessage>( request));
-            if (request.Content != null)
-            {
-                if(_onRequestContentAvailable != null)
-                    _onRequestContentAvailable(this, new GenericEventArgs<string>(await request.Content.ReadAsStringAsync()));
-      
+                if (request != null)
+                    if (_onRequestAvailable != null)
+                        _onRequestAvailable(this, new GenericEventArgs<HttpRequestMessage>(request));
+                if (request.Content != null)
+                {
+                    if (_onRequestContentAvailable != null)
+                        _onRequestContentAvailable(this, new GenericEventArgs<string>(await request.Content.ReadAsStringAsync()));
+
+                }
+                Console.WriteLine();
+
+                HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
+
+                Console.WriteLine(response.ToString());
+                response.EnsureSuccessStatusCode();
+                if (response.Content != null)
+                {
+                    if (_onResponseContentAvailable != null)
+                        _onResponseContentAvailable(this, new GenericEventArgs<string, byte[]>(request.GetHashCode().ToString(), await response.Content.ReadAsByteArrayAsync()));
+                    //Console.WriteLine(await response.Content.ReadAsStringAsync());
+                }
+                Console.WriteLine($"Response: Success? => {response.IsSuccessStatusCode}");
+                Console.WriteLine($"Response: HttpStatuscode? => {response.StatusCode}");
+                Console.WriteLine($"RequestMessageToResponse? => {response.RequestMessage}");
+                Console.WriteLine(await response.Content.ReadAsStringAsync());
+                Console.WriteLine();
+
+                return response;
             }
-            Console.WriteLine();
-
-            HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
-
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString()) ;
+                return null;
+            }
             
-            Console.WriteLine(response.ToString());
-            response.EnsureSuccessStatusCode();
-            if (response.Content != null)
-            {
-                if(_onResponseContentAvailable != null)
-                    _onResponseContentAvailable(this, new GenericEventArgs<string,byte[]>(request.GetHashCode().ToString(),await response.Content.ReadAsByteArrayAsync()));
-                //Console.WriteLine(await response.Content.ReadAsStringAsync());
-            }
-            Console.WriteLine($"Response: Success? => {response.IsSuccessStatusCode}");
-            Console.WriteLine($"Response: HttpStatuscode? => {response.StatusCode}");
-            Console.WriteLine($"RequestMessageToResponse? => {response.RequestMessage}");
-            Console.WriteLine(await response.Content.ReadAsStringAsync());
-            Console.WriteLine();
-
-            return response;
         }
 
         public event EventHandler<GenericEventArgs<string>> OnRequestContentAvailable

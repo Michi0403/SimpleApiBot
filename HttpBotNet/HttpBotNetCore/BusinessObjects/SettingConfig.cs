@@ -14,7 +14,6 @@ namespace BotNetCore.BusinessObjects
         /// Token from Metabot in Icq
         /// </summary>
         [DataMember]
-        public string Token = @"001.1641191746.0491355346:760774823";
         /// <summary>
         /// Optional BotId
         /// </summary>
@@ -34,7 +33,10 @@ namespace BotNetCore.BusinessObjects
         /// Path to SSL Certificate, you can let your Bot generate a certificate include IcqBotNetCore.Helper Namespace with Certificateutil
         /// </summary>
         [DataMember]
-        public string PathToCert = Environment.CurrentDirectory.TrimEnd('\\') + '\\' + "MyCert.pfx";
+        public string PathToCert = Environment.CurrentDirectory.TrimEnd('\\') + '\\';
+        /// <summary>
+        /// Cert Filename
+        /// </summary>
         [DataMember]
         public string CertFileName = "MyCert";
         /// <summary>
