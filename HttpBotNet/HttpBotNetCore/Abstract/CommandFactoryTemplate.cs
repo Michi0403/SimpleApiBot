@@ -19,6 +19,9 @@ using System.Threading;
 
 namespace BotNetCore.Abstract
 {
+    /// <summary>
+    /// Template for IBotCommand Factories
+    /// </summary>
     [DataContract]
     public abstract class IBotCommandFactoryTemplate
     {
@@ -27,10 +30,21 @@ namespace BotNetCore.Abstract
         /// </summary>
         [DataMember]
         public ConcurrentQueue<IBotCommand> CommandQueue { get; set; } = new ConcurrentQueue<IBotCommand>();
+        /// <summary>
+        /// HttpClientref used for this IBotCommandFactory
+        /// </summary>
         public HttpClient HttpClient { get => _httpClient; }
+        /// <summary>
+        /// Apis usually use tokens for authentication
+        /// </summary>
         public string Token { get => _token; }
-
+        /// <summary>
+        /// HttpClientRef for this Factory
+        /// </summary>
         protected HttpClient _httpClient { get; set; }
+        /// <summary>
+        /// Token for ApiBot
+        /// </summary>
         protected string _token = string.Empty;
 
 
@@ -40,50 +54,54 @@ namespace BotNetCore.Abstract
         /// </summary>
         /// <param name="httpClientRef"></param>
         /// <param name="token"></param>
-        public IBotCommandFactoryTemplate(HttpClient httpClientRef, string token)
+        protected IBotCommandFactoryTemplate(HttpClient httpClientRef, string token)
         {
             _httpClient = httpClientRef;
             this._token = token;
         }
-
+        /// <summary>
+        /// Refresh Token
+        /// </summary>
+        /// <param name="httpClientRef">httpClientRef</param>
+        /// <param name="token">token</param>
         public void RefreshHttpClientRefAndToken(HttpClient httpClientRef, string token)
         {
             _httpClient = httpClientRef;
             this._token = token;
         }
 
-            /// <summary>
-            /// Creates IBotCommand
-            /// </summary>
-            /// <param name="command">IcqBotNetCore.BusinessObjects.Commands.ApiCommand</param>
-            /// <param name="httpMethod">IcqBotNetCore.BusinessObjects.Commands.HttpMethodEnum</param>
-            /// <param name="parameter">ConcurrentDictionary<ParamTypeEnum, string></param>
-            /// <param name="multipartFormDataContent">MultipartFormDataContent</param>
-            /// <returns></returns>
-            abstract public IBotCommand CreateCommand(
+        /// <summary>
+        /// Creates IBotCommand
+        /// </summary>
+        /// <param name="apiCommandEnum">BotNetCore.BusinessObjects.Enums.ApiCommandEnums</param>
+        /// <param name="httpMethod">IcqBotNetCore.BusinessObjects.Commands.HttpMethodEnum</param>
+        /// <param name="parameter">ConcurrentDictionary ParamTypeEnum string </param>
+        /// <param name="multipartFormDataContent">MultipartFormDataContent</param>
+        /// <returns></returns>
+        abstract public IBotCommand CreateCommand(
             ApiCommandEnum apiCommandEnum,
             HttpMethodEnum httpMethod,
             ConcurrentDictionary<ParamTypeEnum, string> parameter = null,
             MultipartFormDataContent multipartFormDataContent = null);
 
-            //=>
-            //     apiCommandEnum switch
-            //    {
-            //        //apiCommandEnum.SelfGet => new Self(_token,_httpClient),
-            //        //IcqApiCommandEnum.GetEvents => new EventsGet(_token,_httpClient,parameter.ToGenericCommandTemplateList()),
-            //        //IcqApiCommandEnum.SendText => new SendText(_token,_httpClient,parameter.ToGenericCommandTemplateList()),
+        //=>
+        //     apiCommandEnum switch
+        //    {
+        //        //apiCommandEnum.SelfGet => new Self(_token,_httpClient),
+        //        //IcqApiCommandEnum.GetEvents => new EventsGet(_token,_httpClient,parameter.ToGenericCommandTemplateList()),
+        //        //IcqApiCommandEnum.SendText => new SendText(_token,_httpClient,parameter.ToGenericCommandTemplateList()),
 
-            //        _ => throw new ArgumentException(message: "Invalid enum Value", paramName: nameof(httpMethod)),
-            //    };
-            /// <summary>
-            /// Default Command is Self Get
-            /// </summary>
-            /// <param name="command">IcqBotNetCore.BusinessObjects.Commands.ApiCommand</param>
-            /// <param name="httpMethod">IcqBotNetCore.BusinessObjects.Commands.HttpMethodEnum</param>
-            /// <param name="parameter">ConcurrentDictionary<ParamTypeEnum, string></param>
-            /// <param name="multipartFormDataContent">MultipartFormDataContent</param>
-            /// <returns></returns>
-            abstract public bool TryCreateCommandAndPutToQueue(
+        //        _ => throw new ArgumentException(message: "Invalid enum Value", paramName: nameof(httpMethod)),
+        //    };
+        /// <summary>
+        /// Default Command is Self Get
+        /// </summary>
+        /// <param name="apiCommandEnum">IcqBotNetCore.BusinessObjects.Commands.ApiCommand</param>
+        /// <param name="httpMethod">IcqBotNetCore.BusinessObjects.Commands.HttpMethodEnum</param>
+        /// <param name="parameter">ConcurrentDictionary ParamTypeEnum string</param>
+        /// <param name="multipartFormDataContent">MultipartFormDataContent</param>
+        /// <returns></returns>
+        abstract public bool TryCreateCommandAndPutToQueue(
             ApiCommandEnum apiCommandEnum,
             HttpMethodEnum httpMethod,
             ConcurrentDictionary<ParamTypeEnum, string> parameter = null,
@@ -160,7 +178,7 @@ namespace BotNetCore.Abstract
         //}
 
         /// <summary>
-        /// Cast ConcurrentDictionary<ParamTypeEnum,string> to ConcurrentDictionary<string,string>  
+        /// Cast ConcurrentDictionary ParamTypeEnum string to ConcurrentDictionary string string
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
@@ -179,7 +197,11 @@ namespace BotNetCore.Abstract
             }
         }
 
-
+        /// <summary>
+        /// Try add iBotCommand to iBotCommandQueue of this Factory
+        /// </summary>
+        /// <param name="iBotCommand">command to put factory in collection</param>
+        /// <returns>success/fail bool</returns>
         public virtual bool TryAddCommandToQueue(IBotCommand iBotCommand)
         {
             try
@@ -193,7 +215,11 @@ namespace BotNetCore.Abstract
                 return false;
             }
         }
-
+        /// <summary>
+        /// Try to put all iBotCommands of this List in collection
+        /// </summary>
+        /// <param name="iBotCommands">commandcollection to put in factory collection</param>
+        /// <returns>success/fail bool</returns>
         public virtual bool TryAddListIBotCommandToQueue(List<IBotCommand> iBotCommands)
         {
             try
@@ -208,7 +234,11 @@ namespace BotNetCore.Abstract
                 return false;
             }
         }
-
+        /// <summary>
+        /// Tries to let all Commands in CommandQueue of this Factory, run
+        /// </summary>
+        /// <param name="waitForCompletion">waits in 1 second step till all commands have been sended</param>
+        /// <returns>success/fail bool</returns>
         public virtual bool TryRunFullQueue(bool waitForCompletion=false)
         {
             try
@@ -232,13 +262,18 @@ namespace BotNetCore.Abstract
                 return false;
             }
         }
-
+        /// <summary>
+        /// Try run next Command in Queue
+        /// </summary>
+        /// <returns></returns>
         public virtual bool TryRunNext()
         {
             try
             {
                 IBotCommand iCommand;
-                return CommandQueue.TryDequeue(out iCommand);
+                CommandQueue.TryDequeue(out iCommand);
+                iCommand.ProcessCommand();
+                return true;
             }
             catch (Exception ex)
             {

@@ -88,12 +88,15 @@ namespace HttpBotNet
 
                 Thread.Sleep(10000);
                 Console.WriteLine(yeah.ToString());
-                var test = bot.BotResponseFactory.ResponseBag;
 
-                for (int counter = 0; counter < test.Count; counter++)
+                ConcurrentBag<IBotResponse> botResponseBog = new ConcurrentBag<IBotResponse>();
+                botResponseBog = bot.BotResponseFactory.ResponseBag;
+
+
+                for (int counter = 0; counter < botResponseBog.Count; counter++)
                 {
                     IBotResponse response = null;
-                    test?.TryTake(out response);
+                    botResponseBog?.TryTake(out response);
                     var response2 = response as Response;
                     if (response2 != null)
                         response2.Save(@$"{telegramCfg.SettingConfig.PathForHttpData}" + @$"ResponseFinal_" + Path.GetRandomFileName() + "_" + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "") + ".xml");

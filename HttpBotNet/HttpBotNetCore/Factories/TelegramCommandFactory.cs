@@ -15,14 +15,28 @@ using System.Reflection;
 
 namespace BotNetCore.Factories
 {
+    /// <summary>
+    /// Telegram Command Factory for Telegram Bot
+    /// </summary>
     public class TelegramCommandFactory : IBotCommandFactoryTemplate
     {
 
-
+        /// <summary>
+        /// Default Constructor, callse baseclass Constructor of IBotCommandFactoryTemplate
+        /// </summary>
+        /// <param name="httpClientRef"></param>
+        /// <param name="token"></param>
         public TelegramCommandFactory(HttpClient httpClientRef, string token) : base(httpClientRef, token)
         {
         }
-
+        /// <summary>
+        /// Create IBotCommand from provided Params
+        /// </summary>
+        /// <param name="apiCommandEnum">Chooses Api Method</param>
+        /// <param name="httpMethod">Chooses HTTP Method for Api Method</param>
+        /// <param name="parameter">ConcurrentDictionary with Parameters for the IBotCommand, default null</param>
+        /// <param name="multipartFormDataContent">MultiPartForm Content for this IBotCommand, default null</param>
+        /// <returns></returns>
         public override IBotCommand CreateCommand(ApiCommandEnum apiCommandEnum, HttpMethodEnum httpMethod, ConcurrentDictionary<ParamTypeEnum, string> parameter = null, MultipartFormDataContent multipartFormDataContent = null)
         {
             try
@@ -72,7 +86,15 @@ namespace BotNetCore.Factories
                 return null;
             }
         }
-
+        /// <summary>
+        /// Try Create Command and put to queue
+        /// </summary>
+        /// <param name="apiCommandEnum">Chooses Api Method</param>
+        /// <param name="httpMethod">Chooses HTTP Method for Api Method</param>
+        /// <param name="parameter">ConcurrentDictionary with Parameters for the IBotCommand, default null</param>
+        /// <param name="multipartFormDataContent">MultiPartForm Content for this IBotCommand, default null</param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public override bool TryCreateCommandAndPutToQueue(ApiCommandEnum apiCommandEnum, HttpMethodEnum httpMethod, ConcurrentDictionary<ParamTypeEnum, string> parameter = null, MultipartFormDataContent multipartFormDataContent = null)
         {
             //TODO

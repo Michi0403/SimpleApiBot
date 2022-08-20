@@ -10,13 +10,20 @@ using System.Threading.Tasks;
 
 namespace BotNetCore.Abstract
 {
+    /// <summary>
+    /// Command Template for IBotCommands
+    /// </summary>
     [DataContract]
-
     public abstract class CommandTemplate : IBotCommand
     {
+        /// <summary>
+        /// Base Adress for Api Method
+        /// </summary>
         [DataMember]
         public abstract string RouteBaseAdress { get; set; }
-
+        /// <summary>
+        /// protected Base Adress for Api Method
+        /// </summary>
         [DataMember]
         protected string _routeBaseAdress;
         protected HttpMethod HttpMethod { get; set; }

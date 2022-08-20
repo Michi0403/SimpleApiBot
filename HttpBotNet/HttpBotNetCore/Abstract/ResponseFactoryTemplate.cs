@@ -16,34 +16,57 @@ using System.Reflection;
 
 namespace BotNetCore.Abstract
 {
+    /// <summary>
+    /// ResponseFactory Template
+    /// </summary>
     [DataContract]
     public abstract class ResponseFactoryTemplate
     {
+        /// <summary>
+        /// Concurrent Bag which can save objects of type IBotResponse
+        /// </summary>
         [DataMember]
         public ConcurrentBag<IBotResponse> ResponseBag { get; set; } = new ConcurrentBag<IBotResponse>();
 
-
+        /// <summary>
+        /// IJSonSerializer to serialize JSON's (maybe not used anymore) //TODO
+        /// </summary>
         public IJSONSerializer serializer { get; set; } = StringExtension.Singleton.Instance.Serializer;
 
+        /// <summary>
+        /// ConcurrentDictionary to store Request data to map for example responses to them
+        /// </summary>
         [DataMember]
         public ConcurrentDictionary<string, ParamTypeEnumComposite> RequestDictionary = new ConcurrentDictionary<string, ParamTypeEnumComposite>();
-
+        /// <summary>
+        /// Default Constructor, don't use it just for serialization intends
+        /// </summary>
         public ResponseFactoryTemplate()
         {
         }
-
+        /// <summary>
+        /// Try to create a Response from JSON Document from HTTPRequest and HTTPResponse
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// <returns>IBotResponse</returns>
         public IBotResponse CreateResponseFromJson(JsonDocument request, JsonDocument response)
         {
 
             ParamTypeEnumComposite requestContent = ParseJsonDocument(request);
             ParamTypeEnumComposite responseContent = ParseJsonDocument(response);
 
-            IBotResponse returnRespond = new Response(requestContent, responseContent);
+            IBotResponse returnResponse = new Response(requestContent, responseContent);
 
-            return returnRespond;
+            return returnResponse;
 
         }
-
+        /// <summary>
+        /// Feeds the Request Dictionary with a jsondocument of the request and a hash of the request
+        /// </summary>
+        /// <param name="request">JsonDocument of Request, parse HTTPRequest to JsonDocument</param>
+        /// <param name="requestHash">hash of Request to map later responses to this request</param>
+        /// <returns>Request Hash</returns>
         public string FeedRequestDictionary(JsonDocument request, string requestHash)
         {
             try
@@ -55,11 +78,17 @@ namespace BotNetCore.Abstract
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Feed RequestDictionary failed");
                 Console.WriteLine(ex.ToString());
                 return string.Empty;
             }
         }
-
+        /// <summary>
+        /// Tries to Create a Response from a Request in RequestDictionary(by hash) and a JSon Document
+        /// </summary>
+        /// <param name="requestHash">Hash of the request in RequestDictionary</param>
+        /// <param name="response"></param>
+        /// <returns></returns>
         public IBotResponse CreateResponseFromRequestAndJson(string requestHash, JsonDocument response)
         {
             try
@@ -87,7 +116,6 @@ namespace BotNetCore.Abstract
         /// </summary>
         /// <param name="jsonDocument"></param>
         /// the Jsondocument from which we need the params+values from
-        /// <param name="objectFirstParam"></param>
         /// maybe unnecessary who knows
         /// <returns></returns>
         protected virtual ParamTypeEnumComposite ParseJsonDocument(JsonDocument jsonDocument)
@@ -184,7 +212,11 @@ namespace BotNetCore.Abstract
                 jsonDocument.Dispose();
             }
         }
-
+        /// <summary>
+        /// Try add this IBotResponse to ResponseBag of this Factory
+        /// </summary>
+        /// <param name="iBotRespond">iBotRespond to store in Bag</param>
+        /// <returns>success/fail bool</returns>
         public virtual bool TryAddResponseToBag(IBotResponse iBotRespond)
         {
             try

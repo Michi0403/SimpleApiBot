@@ -30,19 +30,39 @@ namespace BotNetCore.Bot
     {
         static object _lock1 = new object();
         static object _lock2 = new object();
-        //private static readonly HttpClient client = new HttpClient();
-        private HttpClient _httpClient; //DEBUG
+        private HttpClient _httpClient;
         private HttpClientHandler _handler;
         private Config _config;
         private TelegramCommandFactory _commandfactory;
         private TelegramResponseFactory _responsefactory;
         private LoggingHandler _loggingHandler;
+        /// <summary>
+        /// Get HttpClientref of TelegramBot
+        /// </summary>
         public HttpClient HttpClient => _httpClient;
+        /// <summary>
+        /// Get HttpClientHandlerref of TelegramBot
+        /// </summary>
         public HttpClientHandler HttpClientHandler => _handler;
+        /// <summary>
+        /// Get Config for Telegram Bot
+        /// </summary>
         public Config Config => _config;
+        /// <summary>
+        /// Get Set Telegram command Factory for Telegram Bot
+        /// </summary>
         public IBotCommandFactoryTemplate BotCommandFactory { get => _commandfactory; set { _commandfactory = (TelegramCommandFactory)value; } }
+        /// <summary>
+        /// Get Set Telegram Response Factory for Telegram Bot
+        /// </summary>
         public ResponseFactoryTemplate BotResponseFactory { get => _responsefactory; set => _responsefactory = (TelegramResponseFactory)value; }
+        /// <summary>
+        /// Get Token of this Telegram Bot
+        /// </summary>
         public string Token => _config.SettingConfig.Token;
+        /// <summary>
+        /// Property LoggingHandler ref of Telegram Bot
+        /// </summary>
         public LoggingHandler LoggingHandler => _loggingHandler;
 
 
@@ -64,12 +84,13 @@ namespace BotNetCore.Bot
                     else if(_config == null && config != null)
                             _config = config;
                     else if(_config == null) _config = new Config();
+                    
                     _handler = new HttpClientHandler();
 
                     _handler.ClientCertificates.Add(new X509Certificate2(@$"{    _config.SettingConfig.PathToCert.TrimEnd('\\') + '\\' + _config.SettingConfig.CertFileName + ".pfx"}",
                                                                                 config.SettingConfig.PasswordForPK,
                                                                                 X509KeyStorageFlags.UserKeySet | X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.MachineKeySet));
-                    _handler.SslProtocols = SslProtocols.Tls13 | SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls;
+                    _handler.SslProtocols = SslProtocols.Tls13 | SslProtocols.Tls12 | SslProtocols.None | SslProtocols.Tls;
                     _handler.ClientCertificateOptions = ClientCertificateOption.Automatic;
 
                     _loggingHandler = new LoggingHandler(_handler);
@@ -123,7 +144,10 @@ namespace BotNetCore.Bot
             }
         }
 
-
+        /// <summary>
+        /// Process all Commands stored in this Factory
+        /// </summary>
+        /// <returns>success/fail bool</returns>
         public bool ProcessCommands()
         {
             try
@@ -136,12 +160,16 @@ namespace BotNetCore.Bot
                 return false;
             }
         }
-
+        /// <summary>
+        /// HttpResponse Content incoming -> Event
+        /// </summary>
+        /// <param name="sender">sender</param>
+        /// <param name="e">HttpRequest Content for Event</param>
         public void ResponseContentIncoming(object sender, GenericEventArgs<string, byte[]> e)
         {
             try
             {
-                if(e.EventData != string.Empty)
+                if(e!=null& !string.IsNullOrWhiteSpace( e.EventData))
                 {
                     string fullpath = @$"{Config.SettingConfig.PathForHttpData}".TrimEnd('\\') + '\\' + Path.GetRandomFileName() + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "")+ ".json";
                     e.EventData.Save(fullpath);
@@ -172,12 +200,16 @@ namespace BotNetCore.Bot
                 Console.WriteLine(ex);
             }
         }
-
+        /// <summary>
+        /// HttpRequest Content incoming -> Event
+        /// </summary>
+        /// <param name="sender">sender</param>
+        /// <param name="e">HttpRequest Content for Event</param>
         public void RequestContentIncoming(object sender, GenericEventArgs<string> e)
         {
             try
             {
-                if (e.EventData != string.Empty)
+                if (e!=null && !string.IsNullOrWhiteSpace(e.EventData))
                 {
                     string fullpath = @$"{Config.SettingConfig.PathForHttpData}" + @$"\httpData\RequestContent" + Path.GetRandomFileName() + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "") + ".json";
                     e.EventData.Save(fullpath);
@@ -191,12 +223,16 @@ namespace BotNetCore.Bot
                 Console.WriteLine(ex);
             }
         }
-
+        /// <summary>
+        /// HttpRequest incoming -> Event
+        /// </summary>
+        /// <param name="sender">sender</param>
+        /// <param name="e">HttpResponse Content for Event</param>
         public void RequestIncoming(object sender, GenericEventArgs<HttpRequestMessage> e)
         {
             try
             {
-                if (e.EventData != null)
+                if (e!= null && e.EventData != null)
                 {
                     //string fullpath = @$"{Config.SettingConfig.PathForHttpData}" + @$"\httpData\Request" + Path.GetRandomFileName() + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "") + ".json";
                     //var test = StringExtension.DeserializeAnonymousType(e.EventData,new { test = "" }).test;

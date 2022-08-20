@@ -15,10 +15,17 @@ using BotNetCore.Extensions;
 
 namespace BotNetCore.Factories
 {
+    /// <summary>
+    /// Factory for Icq Bot to Create and Process IcqCommands
+    /// </summary>
     public class IcqCommandFactory : IBotCommandFactoryTemplate
     {
        
-
+        /// <summary>
+        /// Icq Command Factory Constructor, calls base class Constructor
+        /// </summary>
+        /// <param name="httpClientRef">httpclientRef</param>
+        /// <param name="token">token for httpClient</param>
         public IcqCommandFactory(HttpClient httpClientRef, string token) : base(httpClientRef, token)
         {
         }
@@ -78,7 +85,7 @@ namespace BotNetCore.Factories
             }
             catch (Exception ex)
             {
-                 Console.WriteLine(ex);
+                Console.WriteLine(ex);
                 return null;
             }
         }
@@ -86,9 +93,9 @@ namespace BotNetCore.Factories
         /// <summary>
         /// Default Command is Self Get
         /// </summary>
-        /// <param name="command">IcqBotNetCore.BusinessObjects.Commands.ApiCommand</param>
+        /// <param name="apiCommandEnum">BotNetCore.BusinessObjects.Enums.ApiCommandEnums</param>
         /// <param name="httpMethod">IcqBotNetCore.BusinessObjects.Commands.HttpMethodEnum</param>
-        /// <param name="parameter">ConcurrentDictionary<ParamTypeEnum, string></param>
+        /// <param name="parameter">ConcurrentDictionary ParamTypeEnum string</param>
         /// <param name="multipartFormDataContent">MultipartFormDataContent</param>
         /// <returns></returns>
         public override bool TryCreateCommandAndPutToQueue(ApiCommandEnum apiCommandEnum, HttpMethodEnum httpMethod, ConcurrentDictionary<ParamTypeEnum, string> parameter = null, MultipartFormDataContent multipartFormDataContent = null)
