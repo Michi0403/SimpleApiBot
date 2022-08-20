@@ -95,7 +95,7 @@ namespace HttpBotNet
                 test?.TryTake(out response);
                 var response2 = response as Response;
                 if (response2 != null)
-                    response2.Save(@$"{cfg.SettingConfig.PathForHttpData}" + @$"\ResponseFinal_" + Path.GetRandomFileName() + "_" + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "") + ".xml");
+                    response2.Save(@$"{cfg.SettingConfig.PathForHttpData}"+ @$"ResponseFinal_" + Path.GetRandomFileName() + "_" + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "") + ".xml");
 
             }
 

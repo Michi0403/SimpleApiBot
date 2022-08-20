@@ -42,6 +42,9 @@ namespace BotNetCore.Extensions
         private static T CreateNew<T>(string path) where T : IDataFile, new()
         {
             var data = new T();
+            var pathToDirectory = Path.GetDirectoryName(path);
+            if ( !Directory.Exists(pathToDirectory))
+                Directory.CreateDirectory(pathToDirectory);
             using FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
             {
                 ISerializer serializer = Singleton.Instance.Serializer;

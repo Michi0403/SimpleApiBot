@@ -65,7 +65,7 @@ namespace BotNetCore.Bot
                         _config = new Config();
                     _handler = new HttpClientHandler();
 
-                    _handler.ClientCertificates.Add(new X509Certificate2(@$"{    _config.SettingConfig.PathToCert.TrimEnd('\\')}",
+                    _handler.ClientCertificates.Add(new X509Certificate2(@$"{    _config.SettingConfig.PathToCert.TrimEnd('\\') + '\\' + _config.SettingConfig.CertFileName + ".pfx"}",
                                                                                 config.SettingConfig.PasswordForPK,
                                                                                 X509KeyStorageFlags.UserKeySet | X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.MachineKeySet));
                     _handler.SslProtocols = SslProtocols.Tls13 | SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls;

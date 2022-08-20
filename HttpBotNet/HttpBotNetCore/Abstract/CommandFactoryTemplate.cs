@@ -219,10 +219,10 @@ namespace BotNetCore.Abstract
                 });
                 if(waitForCompletion)
                 {
-                    do
+                    while(!parallelLoopResult.IsCompleted)
                     {
                         Thread.Sleep(1000);
-                    } while (!parallelLoopResult.IsCompleted);
+                    }
                 }
                 return true;
             }
