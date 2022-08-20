@@ -60,7 +60,12 @@ namespace HttpBotNet.Serializer
             }
             
         }
-
+        /// <summary>
+        /// Serialize to xml with help DataContractResolver, necessary to find Types at runtime in Assembly BotNetCore
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="stream"></param>
         public void Serialize<T>(T data, Stream stream)
         {
             try

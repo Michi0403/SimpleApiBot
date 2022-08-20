@@ -49,7 +49,7 @@ namespace HttpBotNet
                 telegramCfg.SettingConfig.PathToThisConfig= Directory.GetCurrentDirectory().TrimEnd('\\')+ '\\'+"telegramConfig.xml";
                 telegramCfg.SettingConfig.PathToCert = telegramCfg.SettingConfig.PathToCert.TrimEnd('\\') + '\\' + "telegramCert\\";
                 telegramCfg.SettingConfig.CertFileName = "TelegramBotXCertFile";
-                telegramCfg.SettingConfig.Token = "xxxxx";
+                telegramCfg.SettingConfig.Token = "yx";
                 telegramCfg.SettingConfig.PathForHttpData= telegramCfg.SettingConfig.PathToCert.TrimEnd('\\') + '\\' + "telegramPathForHttpData\\";
                 telegramCfg.SettingConfig.ApiRoute = @"https://api.telegram.org/";
                 File.Delete(telegramCfg.SettingConfig.PathToThisConfig);
@@ -71,17 +71,17 @@ namespace HttpBotNet
                 Dictionary<ParamTypeEnum, string> testxxx = new Dictionary<ParamTypeEnum, string>() { };
                 ConcurrentDictionary<ParamTypeEnum, string> parameter = new ConcurrentDictionary<ParamTypeEnum, string>(testxxx);
                 if (commandFactory.CreateCommand((ApiCommandEnum)TelegramApiCommandEnum.getMe, HttpMethodEnum.Get, parameter: parameter) is IBotCommand botcommand2)
-                    if (botcommand2 != null) commandFactory.TryAddCommandToQueue(botcommand2);
+                    commandFactory.TryAddCommandToQueue(botcommand2);
 
                 Dictionary<ParamTypeEnum, string> sendmessagetest = new Dictionary<ParamTypeEnum, string>(){ { TelegramParamTypeEnum.chat_id, "@Michael Flesh" }, { TelegramParamTypeEnum.text, "Haha" } };
                 ConcurrentDictionary<ParamTypeEnum, string> paramsendmessage = new ConcurrentDictionary<ParamTypeEnum, string>(sendmessagetest);
                 if (commandFactory.CreateCommand((ApiCommandEnum)TelegramApiCommandEnum.sendMessage, HttpMethodEnum.Get, parameter: parameter) is IBotCommand botcommand3)
-                    if (botcommand3 != null) commandFactory.TryAddCommandToQueue(botcommand3);
+                    commandFactory.TryAddCommandToQueue(botcommand3);
 
                 Dictionary<ParamTypeEnum, string> testgetupdates = new Dictionary<ParamTypeEnum, string>() { };
                 ConcurrentDictionary<ParamTypeEnum, string> getupdatesparams = new ConcurrentDictionary<ParamTypeEnum, string>(testgetupdates);
                 if (commandFactory.CreateCommand((ApiCommandEnum)TelegramApiCommandEnum.getUpdates, HttpMethodEnum.Get, parameter: parameter) is IBotCommand botcommand4)
-                    if (botcommand4 != null) commandFactory.TryAddCommandToQueue(botcommand4 );
+                    commandFactory.TryAddCommandToQueue(botcommand4 );
 
                 telegramCfg.Save(telegramCfg.SettingConfig.PathToThisConfig.TrimEnd('\\'));
                 bool yeah = commandFactory.TryRunFullQueue(true);
@@ -89,18 +89,20 @@ namespace HttpBotNet
                 Thread.Sleep(10000);
                 Console.WriteLine(yeah.ToString());
 
-                ConcurrentBag<IBotResponse> botResponseBog = new ConcurrentBag<IBotResponse>();
-                botResponseBog = bot.BotResponseFactory.ResponseBag;
+                ConcurrentBag<IBotResponse> botResponseBag = new ConcurrentBag<IBotResponse>();
+                botResponseBag = bot.BotResponseFactory.ResponseBag;
 
-
-                for (int counter = 0; counter < botResponseBog.Count; counter++)
+                if(botResponseBag != null)
                 {
-                    IBotResponse response = null;
-                    botResponseBog?.TryTake(out response);
-                    var response2 = response as Response;
-                    if (response2 != null)
-                        response2.Save(@$"{telegramCfg.SettingConfig.PathForHttpData}" + @$"ResponseFinal_" + Path.GetRandomFileName() + "_" + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "") + ".xml");
+                    for (int counter = 0; counter < botResponseBag.Count; counter++)
+                    {
+                        IBotResponse response = null;
+                        botResponseBag.TryTake(out response);
+                        var response2 = response as Response;
+                        if (response2 != null)
+                            response2.Save(@$"{telegramCfg.SettingConfig.PathForHttpData}" + @$"ResponseFinal_" + Path.GetRandomFileName() + "_" + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "") + ".xml");
 
+                    }
                 }
 
                 //Test for deserialization of responses
@@ -135,9 +137,9 @@ namespace HttpBotNet
                         Console.WriteLine("found ComponentParam");
                         foreach(var childrenOfRoot in componentParam.children)
                         {
-                            Console.WriteLine(childrenOfRoot.ToString());
+                            Console.WriteLine(childrenOfRoot.ReturnValue());
                         }
-                        Console.WriteLine(componentParam.ToString());
+                        Console.WriteLine(componentParam.ReturnValue);
                     }
                     //foreach(var composite in compositesInResponse.Where(x => x.Item2.Contains("/IchBraucheAufmerksamkeit")).ToList())
                     //{
@@ -150,7 +152,7 @@ namespace HttpBotNet
                     //}
                 }
 
-                foreach(var entry in ListOfMessages) Console.WriteLine(entry.ToString());
+                foreach(var entry in ListOfMessages) Console.WriteLine("param: " + entry.Item1.ToString() + "value: " + entry.Item2.ToString());
                 Console.WriteLine("Telegram Implementation ended here");
             }
             catch (Exception ex)
@@ -185,30 +187,30 @@ namespace HttpBotNet
                 Dictionary<ParamTypeEnum, string> test2 = new Dictionary<ParamTypeEnum, string>() { { IcqParamTypeEnum.lastEventId, "7" }, { IcqParamTypeEnum.pollTime, "60" } };
                 ConcurrentDictionary<ParamTypeEnum, string> parameter23 = new ConcurrentDictionary<ParamTypeEnum, string>(test2);
                 if (commandFactory.CreateCommand((ApiCommandEnum)IcqApiCommandEnum.GetEvents, HttpMethodEnum.Get, parameter: parameter23) is IBotCommand botcommand3)
-                    if (botcommand3 != null) commandFactory.TryAddCommandToQueue(botcommand3);
+                    commandFactory.TryAddCommandToQueue(botcommand3);
 
                 Dictionary<ParamTypeEnum, string> testxxx = new Dictionary<ParamTypeEnum, string>() { };
                 ConcurrentDictionary<ParamTypeEnum, string> parameter = new ConcurrentDictionary<ParamTypeEnum, string>(testxxx);
                 if (commandFactory.CreateCommand((ApiCommandEnum)IcqApiCommandEnum.SelfGet, HttpMethodEnum.Get, parameter: parameter) is IBotCommand botcommand2)
-                    if (botcommand2 != null) commandFactory.TryAddCommandToQueue(botcommand2);
+                    commandFactory.TryAddCommandToQueue(botcommand2);
 
                 Dictionary<ParamTypeEnum, string> sendMessageParameter = new Dictionary<ParamTypeEnum, string>() { { IcqParamTypeEnum.chatId, "691762017@chat.agent" }, { IcqParamTypeEnum.text, "- @[247319424]" } };
                 ConcurrentDictionary<ParamTypeEnum, string> parameter2 = new ConcurrentDictionary<ParamTypeEnum, string>(sendMessageParameter);
 
                 if (commandFactory.CreateCommand((ApiCommandEnum)IcqApiCommandEnum.SendText, HttpMethodEnum.Get, parameter: parameter2) is IBotCommand botcommand4)
-                    if (botcommand4 != null) commandFactory.TryAddCommandToQueue(botcommand4);
+                    commandFactory.TryAddCommandToQueue(botcommand4);
 
                 cfg.Save(cfg.SettingConfig.PathToThisConfig.TrimEnd('\\'));
                 bool yeah = commandFactory.TryRunFullQueue(true);
 
                 Thread.Sleep(10000);
                 Console.WriteLine(yeah.ToString());
-                var test = bot.BotResponseFactory.ResponseBag;
-
-                for (int counter = 0; counter < test.Count; counter++)
+                ConcurrentBag<IBotResponse> responseBag = new ConcurrentBag<IBotResponse>();
+                responseBag = bot.BotResponseFactory.ResponseBag;
+                for (int counter = 0; counter < responseBag.Count; counter++)
                 {
                     IBotResponse response = null;
-                    test?.TryTake(out response);
+                    responseBag?.TryTake(out response);
                     var response2 = response as Response;
                     if (response2 != null)
                         response2.Save(@$"{cfg.SettingConfig.PathForHttpData}" + @$"ResponseFinal_" + Path.GetRandomFileName() + "_" + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "") + ".xml");

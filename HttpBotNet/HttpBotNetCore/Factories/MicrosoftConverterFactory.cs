@@ -17,21 +17,41 @@ namespace BotNetCore.Factories
 
     public class DictionaryTKeyEnumTValueConverter : JsonConverterFactory
     {
+        /// <summary>
+        /// Checks if Type can be convertet
+        /// </summary>
+        /// <param name="typeToConvert"></param>
+        /// <returns></returns>
         public override bool CanConvert(Type typeToConvert)
         {
-            if (!typeToConvert.IsGenericType)
+            try
             {
+                if (!typeToConvert.IsGenericType)
+                {
+                    return false;
+                }
+
+                if (typeToConvert.GetGenericTypeDefinition() != typeof(Dictionary<,>))
+                {
+                    return false;
+                }
+
+                return typeToConvert.GetGenericArguments()[0].IsEnum;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("CanConvert Method failed");
+                Console.WriteLine(ex.ToString());
                 return false;
             }
-
-            if (typeToConvert.GetGenericTypeDefinition() != typeof(Dictionary<,>))
-            {
-                return false;
-            }
-
-            return typeToConvert.GetGenericArguments()[0].IsEnum;
+            
         }
-
+        /// <summary>
+        /// Create JsonConverter for type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public override JsonConverter CreateConverter(
             Type type,
             JsonSerializerOptions options)
@@ -55,7 +75,6 @@ namespace BotNetCore.Factories
         {
             private readonly JsonConverter<T> _valueConverter;
             private readonly Type _keyType;
-            private readonly Type _valueType;
             private readonly List<string> _paramsToSkip;
             private readonly string _firstElementOfNestedClass;
             public ListEnumConverterInner(JsonSerializerOptions options, List<string> paramToSkip, string firstElementOfNestedClass)

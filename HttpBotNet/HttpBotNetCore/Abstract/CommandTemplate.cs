@@ -26,20 +26,40 @@ namespace BotNetCore.Abstract
         /// </summary>
         [DataMember]
         protected string _routeBaseAdress;
+        /// <summary>
+        /// Property of HttpMethod
+        /// </summary>
         protected HttpMethod HttpMethod { get; set; }
-
+        /// <summary>
+        /// httpMethodRef
+        /// </summary>
 
         [DataMember]
         public string _httpMethod { get => HttpMethod.ToString(); set => HttpMethod = new HttpMethod(value); }
+        /// <summary>
+        /// HttpClient ref
+        /// </summary>
         [NonSerialized]
         public HttpClient _httpClient;
+        /// <summary>
+        /// Token for Command Template
+        /// </summary>
         [DataMember]
         protected string _token;
-
+        /// <summary>
+        /// Constructor just intended for serialization reasons
+        /// </summary>
         public CommandTemplate()
         {
 
         }
+        /// <summary>
+        /// Default Constructor for Command Template, should be used by a new Command
+        /// </summary>
+        /// <param name="client">httpClientRef</param>
+        /// <param name="token">Token for Api</param>
+        /// <param name="parameter">Parameter for Command</param>
+        /// <param name="httpMethod">http Method as String</param>
         public CommandTemplate(HttpClient client, string token, Dictionary<ParamTypeEnum, string> parameter, string httpMethod)
         {
             this._httpClient = client;
@@ -51,14 +71,22 @@ namespace BotNetCore.Abstract
             this.HttpMethod = new HttpMethod(httpMethod);
         }
 
-
-        [DataMember]
-        public Dictionary<ParamTypeEnum, string> Parameter = new Dictionary<ParamTypeEnum, string>();
+        /// <summary>
+        /// Property of Parameter
+        /// </summary>
+        public Dictionary<ParamTypeEnum,string> Parameter { get; set; } = new Dictionary<ParamTypeEnum, string>();
+        /// <summary>
+        /// Process this CommandTemplate
+        /// </summary>
+        /// <returns></returns>
         public virtual Task ProcessCommand()
         {
             return _httpClient.SendAsync(new HttpRequestMessage(HttpMethod, this.ToString()) { Version = new Version(2, 0) });
         }
-
+        /// <summary>
+        /// Override of object ToString() to implement an easy logic to resolve Params
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             try
