@@ -82,7 +82,7 @@ namespace HttpBotNet
 
             cfg.CommandList = commandFactory.CommandQueue.Cast<CommandTemplate>().ToList();
             cfg.Save(cfg.SettingConfig.PathToThisConfig.TrimEnd('\\'));
-            bool yeah = commandFactory.TryRunFullQueue();
+            bool yeah = commandFactory.TryRunFullQueue(true);
             //var test = bot.BotResponseFactory.ResponseBag;
             Console.WriteLine(yeah.ToString());
             var test = bot.BotResponseFactory.ResponseBag;

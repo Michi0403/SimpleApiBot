@@ -15,6 +15,7 @@ using BotNetCore.Extensions;
 using BotNetCore.BusinessObjects.Commands.IcqCommands.Messages;
 using BotNetCore.BusinessObjects.Enums.ApiCommandEnums;
 using BotNetCore.BusinessObjects.Enums.HttpEnums;
+using System.Threading;
 
 namespace BotNetCore.Abstract
 {
@@ -208,14 +209,21 @@ namespace BotNetCore.Abstract
             }
         }
 
-        public virtual bool TryRunFullQueue()
+        public virtual bool TryRunFullQueue(bool waitForCompletion=false)
         {
             try
             {
-                Parallel.ForEach(CommandQueue, command =>
+                ParallelLoopResult parallelLoopResult = Parallel.ForEach(CommandQueue, command =>
                     {
                         command.ProcessCommand();  
                 });
+                if(waitForCompletion)
+                {
+                    do
+                    {
+                        Thread.Sleep(1000);
+                    } while (!parallelLoopResult.IsCompleted);
+                }
                 return true;
             }
             catch (Exception ex)

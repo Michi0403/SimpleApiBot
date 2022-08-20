@@ -9,8 +9,17 @@ using System;
 
 namespace HttpBotNet.Serializer
 {
+    /// <summary>
+    /// Simple DataContract XML Serializer
+    /// </summary>
     public class SimpleDataContractSerializer : ISerializer
     {
+        /// <summary>
+        /// Tries to find assembly of type in BotNetCore Assembly and deserialize the stream to an object of it
+        /// </summary>
+        /// <typeparam name="T">Type of Object to deserialize to</typeparam>
+        /// <param name="stream"></param>
+        /// <returns></returns>
         public T Deserialize<T>(Stream stream)
         {
             Assembly assembly = Assembly.Load(new AssemblyName("BotNetCore"));
@@ -22,14 +31,15 @@ namespace HttpBotNet.Serializer
 
             var serializer = new DataContractSerializer(typeof(T), setting);
 
-            var test = (T)serializer.ReadObject(stream);
+            var returnObject = (T)serializer.ReadObject(stream);
 
-            return test;//(T)serializer.ReadObject(stream);
+            return returnObject;
         }
 
         private void close(XmlDictionaryReader reader)
         {
-
+            reader.Close();
+            reader.Dispose();
         }
 
         public void Serialize<T>(T data, Stream stream)

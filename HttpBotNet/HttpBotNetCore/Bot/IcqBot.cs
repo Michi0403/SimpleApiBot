@@ -142,8 +142,8 @@ namespace BotNetCore.Bot
             {
                 if(e.EventData != string.Empty)
                 {
-                    string fullpath = @$"{Config.SettingConfig.PathForHttpData}" + @$"\ResponseContent_" + Path.GetRandomFileName() + "_" + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "")+ ".json";
-                    e.EventData.Save(fullpath);
+                    //string fullpath = @$"{Config.SettingConfig.PathForHttpData}" + @$"\ResponseContent_" + Path.GetRandomFileName() + "_" + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "")+ ".json";
+                    //e.EventData.Save(fullpath);
                     var responseContentTask = StringExtension.DeserializeByteArrayToJSONDocumentAsync(e.EventData2);
                     do
                     {
