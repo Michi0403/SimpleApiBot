@@ -2,11 +2,44 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <Title>ApiBotNetCore</Title>
+    <Copyright>copyright 2022 Michael Fleischer</Copyright>
+    <PackageProjectUrl>https://github.com/Michi0403/SimpleApiBot</PackageProjectUrl>
+    <Description>I created this lib for myself, building easy fast scalable Bot to existing HttpApi's</Description>
+    <RepositoryUrl>https://github.com/Michi0403/SimpleApiBot</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>httpclient;webapi;bot;apibot;SimpleApiBot</PackageTags>
+    <AssemblyVersion>0.0.0.1</AssemblyVersion>
+    <FileVersion>0.0.0.1</FileVersion>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <AnalysisLevel>6.0-all</AnalysisLevel>
+    <NeutralLanguage>en-150</NeutralLanguage>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackAsTool>True</PackAsTool>
+    <SignAssembly>False</SignAssembly>
+    <AssemblyOriginatorKeyFile></AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="BusinessObjects\Commands\IcqCommands\Chats\" />
     <Folder Include="BusinessObjects\Commands\IcqCommands\Files\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

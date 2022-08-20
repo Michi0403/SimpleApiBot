@@ -19,6 +19,7 @@ using BotNetCore.Interfaces;
 using BotNetCore.BusinessObjects.Responses;
 using System.Threading;
 using BotNetCore.BusinessObjects.Responses.ResponeComposite;
+using System.Reflection;
 
 namespace HttpBotNet
 {
@@ -27,7 +28,7 @@ namespace HttpBotNet
         static void Main(string[] args)
         {
             //Parallel.Invoke(() => LetIcqBotDoStuff(),() => LetTelegramBotDoStuff());
-
+            //CertificateUtil.MakeCert(Path.GetPathRoot(Assembly.GetExecutingAssembly().Location) + @"\CertForBuilding\","SnkToBuildSigned","p@ssw()rt");
             //Task icqBotTask = Task.Run(() => LetIcqBotDoStuff());
             //Console.WriteLine("Started an icq bot");
             Task telegramBotTask = Task.Run(() => LetTelegramBotDoStuff());
@@ -48,7 +49,7 @@ namespace HttpBotNet
                 telegramCfg.SettingConfig.PathToThisConfig= Directory.GetCurrentDirectory().TrimEnd('\\')+ '\\'+"telegramConfig.xml";
                 telegramCfg.SettingConfig.PathToCert = telegramCfg.SettingConfig.PathToCert.TrimEnd('\\') + '\\' + "telegramCert\\";
                 telegramCfg.SettingConfig.CertFileName = "TelegramBotXCertFile";
-                telegramCfg.SettingConfig.Token = "5770786080:AAG-kPT7qEVS2wM_Eb0tz4Lyg-qFmyd1uEQ";
+                telegramCfg.SettingConfig.Token = "xxxxx";
                 telegramCfg.SettingConfig.PathForHttpData= telegramCfg.SettingConfig.PathToCert.TrimEnd('\\') + '\\' + "telegramPathForHttpData\\";
                 telegramCfg.SettingConfig.ApiRoute = @"https://api.telegram.org/";
                 File.Delete(telegramCfg.SettingConfig.PathToThisConfig);

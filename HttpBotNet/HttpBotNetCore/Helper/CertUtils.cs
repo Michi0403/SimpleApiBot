@@ -24,7 +24,14 @@ namespace BotNetCore.Helper
             GeneralHelper.TryCreateDirectoryForThisFile(path.TrimEnd('\\') + '\\' + filename + ".pfx");
             /// Password for PK
             // Create PFX (PKCS #12) with private key
-            File.WriteAllBytes(path.TrimEnd('\\') + '\\' + filename + ".pfx", cert.Export(X509ContentType.Pfx, @password));
+            if(string.IsNullOrEmpty( password))
+            {
+                File.WriteAllBytes(path.TrimEnd('\\') + '\\' + filename + ".pfx", cert.Export(X509ContentType.Pfx));
+            }
+            else
+            {
+                File.WriteAllBytes(path.TrimEnd('\\') + '\\' + filename + ".pfx", cert.Export(X509ContentType.Pfx, @password));
+            }
 
             // Create Base 64 encoded CER (public key only)
             File.WriteAllText(path.TrimEnd('\\') + '\\' + filename + ".cert",

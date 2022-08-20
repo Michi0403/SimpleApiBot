@@ -1,5 +1,6 @@
 ﻿using BotNetCore.Helper;
 using BotNetCore.Interfaces;
+using System;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
@@ -20,36 +21,65 @@ namespace BotNetCore.Extensions
 
         public static void Save<T>(this T data, string path) where T : IDataFile, new()
         {
-            if (!File.Exists(path))
-                CreateNew<T>(path);
-            using FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
+            try
             {
-                ISerializer serializer = Singleton.Instance.Serializer;
-                serializer.Serialize(data, stream);
+                if (!File.Exists(path))
+                    CreateNew<T>(path);
+                using FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
+                {
+                    ISerializer serializer = Singleton.Instance.Serializer;
+                    serializer.Serialize(data, stream);
+                }
             }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine("Saving IDataFile failed");
+                Console.WriteLine(ex.ToString());
+            }
+         
         }
 
         public static T Load<T>(this T data, string path) where T : IDataFile, new()
         {
-            if (!File.Exists(path))
-                return CreateNew<T>(path);
-            using FileStream stream = new FileStream(path, FileMode.Open);
+            try
             {
-                ISerializer serializer = Singleton.Instance.Serializer;
-                return (T)serializer.Deserialize<T>(stream);
+                if (!File.Exists(path))
+                    return CreateNew<T>(path);
+                using FileStream stream = new FileStream(path, FileMode.Open);
+                {
+                    ISerializer serializer = Singleton.Instance.Serializer;
+                    return (T)serializer.Deserialize<T>(stream);
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Loading IDataFile failed");
+                Console.WriteLine(ex.ToString());
+                return default(T);
+            }
+            
         }
 
         private static T CreateNew<T>(string path) where T : IDataFile, new()
         {
-            var data = new T();
-            GeneralHelper.TryCreateDirectoryForThisFile(path);
-            using FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
+            try
             {
-                ISerializer serializer = Singleton.Instance.Serializer;
-                serializer.Serialize(data, stream);
-                return data;
+                var data = new T();
+                GeneralHelper.TryCreateDirectoryForThisFile(path);
+                using FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
+                {
+                    ISerializer serializer = Singleton.Instance.Serializer;
+                    serializer.Serialize(data, stream);
+                    return data;
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Create New failed");
+                Console.WriteLine(ex.ToString());
+                return default(T);
+            }
+
         }
     }
 }

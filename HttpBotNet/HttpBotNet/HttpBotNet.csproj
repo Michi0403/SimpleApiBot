@@ -3,7 +3,51 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
+    <StartupObject>HttpBotNet.Program</StartupObject>
+    <Nullable>warnings</Nullable>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <SignAssembly>False</SignAssembly>
+    <AssemblyOriginatorKeyFile></AssemblyOriginatorKeyFile>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Description>This is just an example implementation for the use of BotNetCore</Description>
+    <Copyright>copyright 2022 Michael Fleischer</Copyright>
+    <PackageProjectUrl>https://github.com/Michi0403/SimpleApiBot/tree/main/HttpBotNet/HttpBotNet</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/Michi0403/SimpleApiBot</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>example;httpbot;instagram;icq</PackageTags>
+    <PackageReleaseNotes>Early release of example Implementations for an icq or a telegram bot using HttpBotNetCore</PackageReleaseNotes>
+    <PackAsTool>True</PackAsTool>
+    <AssemblyVersion>0.0.0.1</AssemblyVersion>
+    <FileVersion>0.0.0.1</FileVersion>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <AnalysisLevel>6.0-all</AnalysisLevel>
+    <Title>Example Implementation of HttpBotNetCore</Title>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>False</Optimize>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
@@ -12,5 +56,9 @@
   <ItemGroup>
     <ProjectReference Include="..\HttpBotNetCore\BotNetCore.csproj" />
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="&quot;C:\Program Files (x86)\Windows Kits\10\bin\10.0.20348.0\x64\signtool.exe&quot; sign /f C:\CertForBuilding\SnkToBuildSigned.pfx /p p@ssw()rt /fd SHA256 &quot;C:\Users\Michael-PC\Documents\sourcetreeprojects#\SimpleApiBot\HttpBotNet\HttpBotNet\bin\Debug\net6.0\HttpBotNet.dll&quot;&#xD;&#xA;&quot;C:\Program Files (x86)\Windows Kits\10\bin\10.0.20348.0\x64\signtool.exe&quot; sign /f C:\CertForBuilding\SnkToBuildSigned.pfx /p p@ssw()rt /fd SHA256 &quot;C:\Users\Michael-PC\Documents\sourcetreeprojects#\SimpleApiBot\HttpBotNet\HttpBotNet\bin\Debug\net6.0\HttpBotNet.exe&quot;&#xD;&#xA;&quot;C:\Program Files (x86)\Windows Kits\10\bin\10.0.20348.0\x64\signtool.exe&quot; sign /f C:\CertForBuilding\SnkToBuildSigned.pfx /p p@ssw()rt /fd SHA256 &quot;C:\Users\Michael-PC\Documents\sourcetreeprojects#\SimpleApiBot\HttpBotNet\HttpBotNet\bin\Debug\net6.0\BotNetCore.dll&quot;&#xD;&#xA;&quot;C:\Program Files (x86)\Windows Kits\10\bin\10.0.20348.0\x64\signtool.exe&quot; sign /f C:\CertForBuilding\SnkToBuildSigned.pfx /p p@ssw()rt /fd SHA256 &quot;C:\Users\Michael-PC\Documents\sourcetreeprojects#\SimpleApiBot\HttpBotNet\HttpBotNet\bin\Debug\net6.0\publish\BotNetCore.dll&quot;&#xD;&#xA;&quot;C:\Program Files (x86)\Windows Kits\10\bin\10.0.20348.0\x64\signtool.exe&quot; sign /f C:\CertForBuilding\SnkToBuildSigned.pfx /p p@ssw()rt /fd SHA256 &quot;C:\Users\Michael-PC\Documents\sourcetreeprojects#\SimpleApiBot\HttpBotNet\HttpBotNet\bin\Debug\net6.0\publish\HttpBotNet.dll&quot;&#xD;&#xA;&quot;C:\Program Files (x86)\Windows Kits\10\bin\10.0.20348.0\x64\signtool.exe&quot; sign /f C:\CertForBuilding\SnkToBuildSigned.pfx /p p@ssw()rt /fd SHA256 &quot;C:\Users\Michael-PC\Documents\sourcetreeprojects#\SimpleApiBot\HttpBotNet\HttpBotNet\bin\Debug\net6.0\publish\HttpBotNet.exe&quot;" />
+  </Target>
 
 </Project>
