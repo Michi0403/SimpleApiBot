@@ -1,4 +1,5 @@
-﻿using BotNetCore.Interfaces;
+﻿using BotNetCore.Helper;
+using BotNetCore.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,75 +22,99 @@ namespace BotNetCore.Extensions
 
         public static async void Save(this string data, string path)
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(path));
-            if (!File.Exists(path))
-                CreateNew(path);
-            using FileStream stream = new FileStream(path, FileMode.Open);
+            try
             {
-                IJSONSerializer serializer = Singleton.Instance.Serializer;
-                await serializer.SerializeAsync(stream, serializer.Unescape(data));
+                GeneralHelper.TryCreateDirectoryForThisFile(path);
+                if (!File.Exists(path))
+                    CreateNew(path);
+                using FileStream stream = new FileStream(path, FileMode.Open);
+                {
+                    IJSONSerializer serializer = Singleton.Instance.Serializer;
+                    await serializer.SerializeAsync(stream, serializer.Unescape(data));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Saving failed...");
+                Console.WriteLine(ex.ToString());
             }
         }
 
-        //public static async ValueTask<T> AnonymousDeserialize<T>(this object data, T anonymousTypeObject, string path)
-        //{
-        //    Directory.CreateDirectory(Path.GetDirectoryName(path));
-            
-        //    if (!File.Exists(path))
-        //        CreateNew(path);
-        //    using FileStream stream = new FileStream(path, FileMode.Open);
-        //    {
-        //        IJSONSerializer serializer = Singleton.Instance.Serializer;
-        //        return await serializer.DeserializeAsync(stream,anonymousTypeObject);
-        //    }
-        //}
-
         private static void CreateNew(string path)
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(path));
-            var data = string.Empty;
-            using FileStream stream = File.Create(path);
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+                var data = string.Empty;
+                using FileStream stream = File.Create(path);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Create New failed");
+                Console.WriteLine(ex.ToString());
+            }
         }
 
         public static string Unescape(string jsonString)
         {
-            IJSONSerializer serializer = Singleton.Instance.Serializer;
-            return serializer.Unescape(jsonString);
+            try
+            {
+                IJSONSerializer serializer = Singleton.Instance.Serializer;
+                return serializer.Unescape(jsonString);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Unescaping string failed");
+                Console.WriteLine(ex.ToString());
+                return string.Empty;
+            }
+            
         }
-
-        //public static T DeserializeAnonymousType<T>(string json, T anonymousTypeObject)
-        //{
-        //    IJSONSerializer serializer = Singleton.Instance.Serializer;
-        //    return serializer.Deserialize<T>(json, anonymousTypeObject);
-        //}
-
         public static async Task<JsonDocument> DeserializeToJSONDocumentAsync<T>(T anonymousTypeObject)
         {
-            IJSONSerializer serializer = Singleton.Instance.Serializer;
-            return await serializer.DeserializeToJSONDocumentAsync(anonymousTypeObject);
+            try
+            {
+                IJSONSerializer serializer = Singleton.Instance.Serializer;
+                return await serializer.DeserializeToJSONDocumentAsync(anonymousTypeObject);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Deserialize to JSON Document Async failed");
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
         }
 
         public static async Task<JsonDocument> DeserializeByteArrayToJSONDocumentAsync(byte[] json)
         {
-            IJSONSerializer serializer = Singleton.Instance.Serializer;
-            return await serializer.DeserializeByteArrayToJSONDocumentAsync(json: json);
+            try
+            {
+                IJSONSerializer serializer = Singleton.Instance.Serializer;
+                return await serializer.DeserializeByteArrayToJSONDocumentAsync(json: json);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Deserialize ByteArray to JSON Document Async failed");
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
         }
 
 
         public static T DeserializeAnonymousType<T>(T anonymousTypeObject, Type goalType, JsonSerializerOptions options = default)
         {
-            IJSONSerializer serializer = Singleton.Instance.Serializer;
-            return serializer.SerializeToJsonDeserializeToAnonym(anonymousTypeObject, goalType);
+            try
+            {
+                IJSONSerializer serializer = Singleton.Instance.Serializer;
+                return serializer.SerializeToJsonDeserializeToAnonym(anonymousTypeObject, goalType);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Deserialize Anonym Object to goalType failed");
+                Console.WriteLine(ex.ToString());
+                return default(T);
+            }
         }
 
-        //public static byte[] ObjectToByteArray(Object obj)
-        //{
-        //    //BinaryFormatter bf = new BinaryFormatter();
-        //    //using (var ms = new MemoryStream())
-        //    //{
-        //    //    bf.Serialize(ms, obj);
-        //    //    return ms.ToArray();
-        //    //}
-        //}
     }
 }

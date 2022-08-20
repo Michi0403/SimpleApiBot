@@ -25,13 +25,14 @@ namespace HttpBotNet
     {
         static void Main(string[] args)
         {
-                //Parallel.Invoke(() => LetIcqBotDoStuff(),() => LetTelegramBotDoStuff());
+            //Parallel.Invoke(() => LetIcqBotDoStuff(),() => LetTelegramBotDoStuff());
 
-            Task icqBotTask = Task.Run(() => LetIcqBotDoStuff());
-            Console.WriteLine("Started an icq bot");
+            //Task icqBotTask = Task.Run(() => LetIcqBotDoStuff());
+            //Console.WriteLine("Started an icq bot");
             Task telegramBotTask = Task.Run(() => LetTelegramBotDoStuff());
             Console.WriteLine("Started a telegram bot");
-            Task.WaitAll(new Task[] { icqBotTask, telegramBotTask });
+            //Task.WaitAll(new Task[] { icqBotTask, telegramBotTask });
+            Task.WaitAll(new Task[] { telegramBotTask });
             Console.WriteLine("Command Line Implementation ended here");
         }
 
@@ -44,8 +45,9 @@ namespace HttpBotNet
                 telegramCfg.SettingConfig.PathToThisConfig= Directory.GetCurrentDirectory().TrimEnd('\\')+ '\\'+"telegramConfig.xml";
                 telegramCfg.SettingConfig.PathToCert = telegramCfg.SettingConfig.PathToCert.TrimEnd('\\') + '\\' + "telegramCert\\";
                 telegramCfg.SettingConfig.CertFileName = "TelegramBotXCertFile";
-                telegramCfg.SettingConfig.Token = "5770786080:AAG-kPT7qEVS2wM_Eb0tz4Lyg-qFmyd1uEQ";
+                telegramCfg.SettingConfig.Token = "xxxx";
                 telegramCfg.SettingConfig.PathForHttpData= telegramCfg.SettingConfig.PathToCert.TrimEnd('\\') + '\\' + "telegramPathForHttpData\\";
+                    telegramCfg.SettingConfig.ApiRoute = @"https://api.telegram.org/";
 
                 telegramCfg.Save(telegramCfg.SettingConfig.PathToThisConfig);
                 telegramCfg = telegramCfg.Load(telegramCfg.SettingConfig.PathToThisConfig);
@@ -61,10 +63,48 @@ namespace HttpBotNet
                 bot.Initialize(telegramCfg);
                 telegramCfg.CommandList.Clear();
 
-                telegramCfg.CommandList.Clear();
-                var commandFactory = new TelegramCommandFactory(bot.HttpClient, telegramCfg.SettingConfig.Token);
+                var commandFactory = bot.BotCommandFactory;
+
+                Dictionary<ParamTypeEnum, string> testxxx = new Dictionary<ParamTypeEnum, string>() { };
+                ConcurrentDictionary<ParamTypeEnum, string> parameter = new ConcurrentDictionary<ParamTypeEnum, string>(testxxx);
+                if (commandFactory.CreateCommand((ApiCommandEnum)TelegramApiCommandEnum.getMe, HttpMethodEnum.Get, parameter: parameter) is IBotCommand botcommand2)
+                    if (botcommand2 != null) commandFactory.TryAddCommandToQueue(botcommand2);
+
+                telegramCfg.Save(telegramCfg.SettingConfig.PathToThisConfig.TrimEnd('\\'));
+                bool yeah = commandFactory.TryRunFullQueue(true);
+
+                Thread.Sleep(10000);
+                Console.WriteLine(yeah.ToString());
+                var test = bot.BotResponseFactory.ResponseBag;
+
+                for (int counter = 0; counter < test.Count; counter++)
+                {
+                    IBotResponse response = null;
+                    test?.TryTake(out response);
+                    var response2 = response as Response;
+                    if (response2 != null)
+                        response2.Save(@$"{telegramCfg.SettingConfig.PathForHttpData}" + @$"ResponseFinal_" + Path.GetRandomFileName() + "_" + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "") + ".xml");
+
+                }
+
+                //Test for deserialization of responses
+                List<IBotResponse> deserializedResponses = new List<IBotResponse>();
+                var httpresponsesAndSoOnWhatever = Directory.GetFiles(@$"{telegramCfg.SettingConfig.PathForHttpData}");
+                foreach (string pathOfFile in httpresponsesAndSoOnWhatever)
+                {
+                    try
+                    {
+                        Response response = new Response();
+                        deserializedResponses.Add(response.Load(pathOfFile));
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                    }
+                }
 
 
+                Console.WriteLine("Telegram Implementation ended here");
             }
             catch (Exception ex)
             {
@@ -93,7 +133,7 @@ namespace HttpBotNet
                 var bot = new IcqBot();
                 bot.Initialize(cfg);
                 cfg.CommandList.Clear();
-                var commandFactory = new IcqCommandFactory(bot.HttpClient, cfg.SettingConfig.Token);
+                var commandFactory = bot.BotCommandFactory;
 
                 Dictionary<ParamTypeEnum, string> test2 = new Dictionary<ParamTypeEnum, string>() { { IcqParamTypeEnum.lastEventId, "7" }, { IcqParamTypeEnum.pollTime, "60" } };
                 ConcurrentDictionary<ParamTypeEnum, string> parameter23 = new ConcurrentDictionary<ParamTypeEnum, string>(test2);

@@ -34,14 +34,14 @@ namespace BotNetCore.Bot
         private HttpClient _httpClient; //DEBUG
         private HttpClientHandler _handler;
         private Config _config;
-        private IcqCommandFactory _commandfactory;
-        private IcqResponseFactory _responsefactory;
+        private TelegramCommandFactory _commandfactory;
+        private TelegramResponseFactory _responsefactory;
         private LoggingHandler _loggingHandler;
         public HttpClient HttpClient => _httpClient;
         public HttpClientHandler HttpClientHandler => _handler;
         public Config Config => _config;
-        public IBotCommandFactoryTemplate BotCommandFactory { get => _commandfactory; set { _commandfactory = (IcqCommandFactory)value; } }
-        public ResponseFactoryTemplate BotResponseFactory { get => _responsefactory; set => _responsefactory = (IcqResponseFactory)value; }
+        public IBotCommandFactoryTemplate BotCommandFactory { get => _commandfactory; set { _commandfactory = (TelegramCommandFactory)value; } }
+        public ResponseFactoryTemplate BotResponseFactory { get => _responsefactory; set => _responsefactory = (TelegramResponseFactory)value; }
         public string Token => _config.SettingConfig.Token;
         public LoggingHandler LoggingHandler => _loggingHandler;
 
@@ -85,8 +85,8 @@ namespace BotNetCore.Bot
                         _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(acceptedHeader));
                     }
                     _httpClient.BaseAddress = new Uri(@$"{_config.SettingConfig.ApiRoute}");
-                    _commandfactory = new IcqCommandFactory(_httpClient, _config.SettingConfig.Token);
-                    _responsefactory = new IcqResponseFactory();
+                    _commandfactory = new TelegramCommandFactory(_httpClient, _config.SettingConfig.Token);
+                    _responsefactory = new TelegramResponseFactory();
                     
                 }
                 else if (config != null)
@@ -197,8 +197,7 @@ namespace BotNetCore.Bot
             {
                 if (e.EventData != null)
                 {
-                    string fullpath = @$"{Config.SettingConfig.PathForHttpData}" + @$"\httpData\Request" + Path.GetRandomFileName() + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "") + ".json";
-                    
+                    //string fullpath = @$"{Config.SettingConfig.PathForHttpData}" + @$"\httpData\Request" + Path.GetRandomFileName() + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "") + ".json";
                     //var test = StringExtension.DeserializeAnonymousType(e.EventData,new { test = "" }).test;
                     var requestTask = StringExtension.DeserializeToJSONDocumentAsync(e.EventData);
                     var request = requestTask.Result;
