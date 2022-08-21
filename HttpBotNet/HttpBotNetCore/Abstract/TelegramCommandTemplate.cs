@@ -39,6 +39,11 @@ namespace BotNetCore.Abstract
                     throw new Exception("no Token provided to TelegramCommandTemplate");
                 fullUrl.Append(_httpClient.BaseAddress.OriginalString.TrimEnd('/') + '/' + "bot" + value.TrimEnd('/') + '/' + _routeBaseAdress.TrimEnd('/').TrimStart('/'));
 
+                if(Parameter.Count>0)
+                {
+                    fullUrl.Append('?');
+                }
+
                 foreach (KeyValuePair<ParamTypeEnum, string> entry in Parameter)
                 {
                     fullUrl.Append(entry.Key.Value + '=' + entry.Value + '&');

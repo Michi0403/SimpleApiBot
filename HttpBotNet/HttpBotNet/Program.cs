@@ -49,8 +49,9 @@ namespace HttpBotNet
                 telegramCfg.SettingConfig.Nick = "@iLikeToFartBot";
                 telegramCfg.SettingConfig.PathToThisConfig= Directory.GetCurrentDirectory().TrimEnd('\\')+ '\\'+"telegramConfig.xml";
                 telegramCfg.SettingConfig.PathToCert = telegramCfg.SettingConfig.PathToCert.TrimEnd('\\') + '\\' + "telegramCert\\";
+                    telegramCfg.SettingConfig.Token = "";
                 telegramCfg.SettingConfig.CertFileName = "TelegramBotXCertFile";
-                telegramCfg.SettingConfig.PathForHttpData= telegramCfg.SettingConfig.PathToCert.TrimEnd('\\') + '\\' + "telegramPathForHttpData\\";
+                telegramCfg.SettingConfig.PathForHttpData= telegramCfg.SettingConfig.PathForHttpData.TrimEnd('\\') + '\\';
                 telegramCfg.SettingConfig.ApiRoute = @"https://api.telegram.org/";
                 File.Delete(telegramCfg.SettingConfig.PathToThisConfig);
                 telegramCfg.Save(telegramCfg.SettingConfig.PathToThisConfig);
@@ -68,19 +69,19 @@ namespace HttpBotNet
 
                 var commandFactory = bot.BotCommandFactory;
 
-                Dictionary<ParamTypeEnum, string> testxxx = new Dictionary<ParamTypeEnum, string>() { };
-                ConcurrentDictionary<ParamTypeEnum, string> parameter = new ConcurrentDictionary<ParamTypeEnum, string>(testxxx);
-                if (commandFactory.CreateCommand((ApiCommandEnum)TelegramApiCommandEnum.getMe, HttpMethodEnum.Get, parameter: parameter) is IBotCommand botcommand2)
-                    commandFactory.TryAddCommandToQueue(botcommand2);
+                //Dictionary<ParamTypeEnum, string> testxxx = new Dictionary<ParamTypeEnum, string>() { };
+                //ConcurrentDictionary<ParamTypeEnum, string> parameter = new ConcurrentDictionary<ParamTypeEnum, string>(testxxx);
+                //if (commandFactory.CreateCommand((ApiCommandEnum)TelegramApiCommandEnum.getMe, HttpMethodEnum.Get, parameter: parameter) is IBotCommand botcommand2)
+                //    commandFactory.TryAddCommandToQueue(botcommand2);
 
-                Dictionary<ParamTypeEnum, string> sendmessagetest = new Dictionary<ParamTypeEnum, string>(){ { TelegramParamTypeEnum.chat_id, "@Michael Flesh" }, { TelegramParamTypeEnum.text, "Haha" } };
-                ConcurrentDictionary<ParamTypeEnum, string> paramsendmessage = new ConcurrentDictionary<ParamTypeEnum, string>(sendmessagetest);
-                if (commandFactory.CreateCommand((ApiCommandEnum)TelegramApiCommandEnum.sendMessage, HttpMethodEnum.Get, parameter: parameter) is IBotCommand botcommand3)
-                    commandFactory.TryAddCommandToQueue(botcommand3);
+                //Dictionary<ParamTypeEnum, string> sendmessagetest = new Dictionary<ParamTypeEnum, string>(){ { TelegramParamTypeEnum.chat_id, "@Michael Flesh" }, { TelegramParamTypeEnum.text, "Haha" } };
+                //ConcurrentDictionary<ParamTypeEnum, string> paramsendmessage = new ConcurrentDictionary<ParamTypeEnum, string>(sendmessagetest);
+                //if (commandFactory.CreateCommand((ApiCommandEnum)TelegramApiCommandEnum.sendMessage, HttpMethodEnum.Get, parameter: parameter) is IBotCommand botcommand3)
+                //    commandFactory.TryAddCommandToQueue(botcommand3);
 
-                Dictionary<ParamTypeEnum, string> testgetupdates = new Dictionary<ParamTypeEnum, string>() { };
+                Dictionary<ParamTypeEnum, string> testgetupdates = new Dictionary<ParamTypeEnum, string>() { { TelegramParamTypeEnum.offset, "1" } };
                 ConcurrentDictionary<ParamTypeEnum, string> getupdatesparams = new ConcurrentDictionary<ParamTypeEnum, string>(testgetupdates);
-                if (commandFactory.CreateCommand((ApiCommandEnum)TelegramApiCommandEnum.getUpdates, HttpMethodEnum.Get, parameter: parameter) is IBotCommand botcommand4)
+                if (commandFactory.CreateCommand((ApiCommandEnum)TelegramApiCommandEnum.getUpdates, HttpMethodEnum.Get, parameter: getupdatesparams) is IBotCommand botcommand4)
                     commandFactory.TryAddCommandToQueue(botcommand4 );
 
                 telegramCfg.Save(telegramCfg.SettingConfig.PathToThisConfig.TrimEnd('\\'));
@@ -129,8 +130,15 @@ namespace HttpBotNet
                 List<ComponentParam> ListOfMessages = new List<ComponentParam>();
                 foreach(IBotResponse messagesInResponse in deserializedResponses)
                 {
+                    if(messagesInResponse.Request == null || messagesInResponse.Response == null)
+                    {
+                            Console.WriteLine(
+                            "This Message is seriously broken, no Request or Response included. Shouldn't be possible " +messagesInResponse.ToString());
+                        break;
+                    }
                         //var compositesInResponse = messagesInResponse.Response.ReturnValue();
                     Console.WriteLine("Deserialized Request values");
+                    if(messagesInResponse.Request.ReturnValue()!= null)
                     foreach (ComponentParam param in messagesInResponse.Request.ReturnValue())
                     {
                         Console.WriteLine("---param---");
@@ -138,6 +146,7 @@ namespace HttpBotNet
                         Console.WriteLine($@"   Value: " + param.value);
                     }
                     Console.WriteLine("Deserialized Response values");
+                    if(messagesInResponse.Response.ReturnValue() != null)
                     foreach (ComponentParam param in messagesInResponse.Response.ReturnValue())
                     {
                         Console.WriteLine("---param---");
@@ -147,6 +156,7 @@ namespace HttpBotNet
 
                     //Look in Responses for something todo
                     Console.WriteLine("Inspect Responses for specific Composites");
+                    if(messagesInResponse.Response.ReturnValue != null) ;
                     foreach(ComponentParam updates in messagesInResponse.Response.ReturnValue().Where(x => x.value.Contains("/IchBraucheAufmerksamkeit") ).ToList() )
                     {
                         Console.WriteLine("Component which contains /IchBraucheAufmerksamkeit");

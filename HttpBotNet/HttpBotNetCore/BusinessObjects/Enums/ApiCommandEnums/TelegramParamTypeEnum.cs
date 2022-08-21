@@ -46,6 +46,8 @@ namespace BotNetCore.BusinessObjects.Enums.ApiCommandEnums
         [DataMember]
         public static readonly TelegramParamTypeEnum Request = new TelegramParamTypeEnum("Request");
         [DataMember]
+        public static readonly TelegramParamTypeEnum Object = new TelegramParamTypeEnum("Object");
+        [DataMember]
         public static readonly TelegramParamTypeEnum ok = new TelegramParamTypeEnum("ok");
 
         [DataMember]
@@ -189,6 +191,8 @@ namespace BotNetCore.BusinessObjects.Enums.ApiCommandEnums
         public static readonly TelegramParamTypeEnum new_chat_members = new TelegramParamTypeEnum("new_chat_members");
         [DataMember]
         public static readonly TelegramParamTypeEnum Array = new TelegramParamTypeEnum("Array");
+        [DataMember]
+        public static readonly TelegramParamTypeEnum undefined = new TelegramParamTypeEnum("undefined");
         public TelegramParamTypeEnum(string value) : base(value)
         {
         }

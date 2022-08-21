@@ -22,6 +22,9 @@ namespace BotNetCore.Abstract
     [DataContract]
     public abstract class ResponseFactoryTemplate
     {
+
+        protected static object _lock1 = new object();
+        protected static object _lock2 = new object();
         /// <summary>
         /// Concurrent Bag which can save objects of type IBotResponse
         /// </summary>
