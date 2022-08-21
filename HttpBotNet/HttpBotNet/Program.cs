@@ -49,7 +49,6 @@ namespace HttpBotNet
                 telegramCfg.SettingConfig.Nick = "@iLikeToFartBot";
                 telegramCfg.SettingConfig.PathToThisConfig= Directory.GetCurrentDirectory().TrimEnd('\\')+ '\\'+"telegramConfig.xml";
                 telegramCfg.SettingConfig.PathToCert = telegramCfg.SettingConfig.PathToCert.TrimEnd('\\') + '\\' + "telegramCert\\";
-                    telegramCfg.SettingConfig.Token = "";
                 telegramCfg.SettingConfig.CertFileName = "TelegramBotXCertFile";
                 telegramCfg.SettingConfig.PathForHttpData= telegramCfg.SettingConfig.PathForHttpData.TrimEnd('\\') + '\\';
                 telegramCfg.SettingConfig.ApiRoute = @"https://api.telegram.org/";
@@ -79,7 +78,7 @@ namespace HttpBotNet
                 //if (commandFactory.CreateCommand((ApiCommandEnum)TelegramApiCommandEnum.sendMessage, HttpMethodEnum.Get, parameter: parameter) is IBotCommand botcommand3)
                 //    commandFactory.TryAddCommandToQueue(botcommand3);
 
-                Dictionary<ParamTypeEnum, string> testgetupdates = new Dictionary<ParamTypeEnum, string>() { { TelegramParamTypeEnum.offset, "1" } };
+                Dictionary<ParamTypeEnum, string> testgetupdates = new Dictionary<ParamTypeEnum, string>() {  };
                 ConcurrentDictionary<ParamTypeEnum, string> getupdatesparams = new ConcurrentDictionary<ParamTypeEnum, string>(testgetupdates);
                 if (commandFactory.CreateCommand((ApiCommandEnum)TelegramApiCommandEnum.getUpdates, HttpMethodEnum.Get, parameter: getupdatesparams) is IBotCommand botcommand4)
                     commandFactory.TryAddCommandToQueue(botcommand4 );
@@ -107,7 +106,7 @@ namespace HttpBotNet
                 }
 
                 //Test for deserialization of responses
-                List<IBotResponse> deserializedResponses = new List<IBotResponse>();
+                 List<IBotResponse> deserializedResponses = new List<IBotResponse>();
                     GeneralHelper.TryCreateDirectoryForThisFile(
                     telegramCfg.SettingConfig.PathForHttpData.TrimEnd('\\') + '\\');
                 var httpresponsesAndSoOnWhatever = Directory.GetFiles(@$"{telegramCfg.SettingConfig.PathForHttpData.TrimEnd('\\')}" + '\\',"*.xml");
@@ -130,84 +129,34 @@ namespace HttpBotNet
                 List<ComponentParam> ListOfMessages = new List<ComponentParam>();
                 foreach(IBotResponse messagesInResponse in deserializedResponses)
                 {
-                    if(messagesInResponse.Request == null || messagesInResponse.Response == null)
-                    {
-                            Console.WriteLine(
-                            "This Message is seriously broken, no Request or Response included. Shouldn't be possible " +messagesInResponse.ToString());
-                        break;
-                    }
-                        //var compositesInResponse = messagesInResponse.Response.ReturnValue();
-                    Console.WriteLine("Deserialized Request values");
-                    if(messagesInResponse.Request.ReturnValue()!= null)
-                    foreach (ComponentParam param in messagesInResponse.Request.ReturnValue())
-                    {
-                        Console.WriteLine("---param---");
-                        Console.WriteLine($@"   Param: " + param.paramTypeEnum.Value);
-                        Console.WriteLine($@"   Value: " + param.value);
-                    }
-                    Console.WriteLine("Deserialized Response values");
-                    if(messagesInResponse.Response.ReturnValue() != null)
-                    foreach (ComponentParam param in messagesInResponse.Response.ReturnValue())
-                    {
-                        Console.WriteLine("---param---");
-                        Console.WriteLine($@"   Param: " + param.paramTypeEnum.Value);
-                        Console.WriteLine($@"   Value: " + param.value);
-                    }
-
                     //Look in Responses for something todo
                     Console.WriteLine("Inspect Responses for specific Composites");
-                    if(messagesInResponse.Response.ReturnValue != null) ;
-                    foreach(ComponentParam updates in messagesInResponse.Response.ReturnValue().Where(x => x.value.Contains("/IchBraucheAufmerksamkeit") ).ToList() )
+                    var kiddies = messagesInResponse.Response.ReturnValue();
+
+                    foreach(var entryttt in kiddies)
                     {
-                        Console.WriteLine("Component which contains /IchBraucheAufmerksamkeit");
-
-
-                        if(updates is ParamTypeEnumComposite paramTypeEnumComposite)
+                        try
                         {
-                            Console.WriteLine("Is Composite");
-                            List<ComponentParam> values = paramTypeEnumComposite.ReturnValue().Where(x=> x is ParamTypeEnumComposite).ToList();
-                            values = paramTypeEnumComposite.ReturnValue()
-                                .Where(
-                                    x => x.value.Contains("/IchBraucheAufmerksamkeit") 
-                                    && x.value.Contains("\"message_id\"")
-                                        )
-                                .ToList();
-                                Console.WriteLine("found a inner composite which value contains message Param");
-                            foreach(ComponentParam value in values.Where(x=> x.paramTypeEnum.Value == TelegramParamTypeEnum.result.ToString()))
+                            Console.WriteLine("Value paramTypeEnum " + entryttt.paramTypeEnum.Value);
+                            Console.WriteLine("Value telegramParamtypeEnum " + TelegramParamTypeEnum.message.ToString());
+                            if (entryttt.paramTypeEnum.Value.ToString() == TelegramParamTypeEnum.message.ToString())
                             {
-                                if(value is ParamTypeEnumComposite paramTypeEnumComposite1)
-                                {
-                                        List<ComponentParam> eventValues = value.ReturnValue();
-                                        ListOfMessages.AddRange(eventValues);
-                                        Console.WriteLine("added Composite of Paramtype message to ListOfMessages");
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Seeked for wrong ParamType maybe, added nothing");
-                                    Console.WriteLine("---Not added it following Param---");
-                                    Console.WriteLine($@"   Param: " + value.paramTypeEnum.Value);
-                                    Console.WriteLine($@"   Value: " + value.value);
-                                }
+                                ListOfMessages.Add(entryttt);
                             }
                         }
-                        //else if (component is ParamTypeEnumLeaf paramTypeEnumLeaf)
-                        //{
-                        //    ListOfMessages.Add(paramTypeEnumLeaf);
-                        //    Console.WriteLine("added leaf to messages");
-                        //}
-                        //else
-                        //{
-                        //    Console.WriteLine("Seeked for wrong parameters maybe, added nothing");
-                        //    Console.WriteLine("---param---");
-                        //    Console.WriteLine($@"   Param: " + component.paramTypeEnum.Value);
-                        //    Console.WriteLine($@"   Value: " + component.value);
-                        //}
+                        catch (Exception ex)
+                        {
+                                Console.WriteLine("Error in adding message");
+                                Console.WriteLine(ex.ToString());
+                        }
+                           
                     }
+
                 }
 
                 foreach(ComponentParam foundMessage in ListOfMessages)
                 {
-                    Console.WriteLine("Found content of seeked value /IchBraucheAufmerksamkeit  in ListOfMessages");
+                    Console.WriteLine("Found Message");
                     if (foundMessage is ParamTypeEnumComposite paramTypeEnumComposite)
                     {
                         Console.WriteLine("Is Composite");
