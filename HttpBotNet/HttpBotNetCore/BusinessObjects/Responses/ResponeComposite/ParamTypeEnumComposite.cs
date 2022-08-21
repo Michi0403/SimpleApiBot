@@ -10,16 +10,31 @@ using System.Threading.Tasks;
 
 namespace BotNetCore.BusinessObjects.Responses.ResponeComposite
 {
+    /// <summary>
+    /// Default Composite for ParamTypeEnum used to store children of ParamTypeEnum and value
+    /// </summary>
     [DataContract]
     public class ParamTypeEnumComposite : ComponentParam , IDataFile
     {
+        /// <summary>
+        /// Store for Children of ParamTypeEnum and value
+        /// </summary>
         [DataMember]
         public List<ComponentParam> children = new List<ComponentParam>();
+        /// <summary>
+        /// Default Constructor, use this
+        /// </summary>
+        /// <param name="paramTypeEnum">ParamTypeEnum for Composite Component</param>
+        /// <param name="value">value for Param for Composite Component</param>
         public ParamTypeEnumComposite(ParamTypeEnum paramTypeEnum, string value) : base(paramTypeEnum, value)
         {
 
         }
-
+        /// <summary>
+        /// Add leaf component to children of this composite
+        /// </summary>
+        /// <param name="leaf">leaf to add</param>
+        /// <returns>success/failure bool</returns>
         public override bool Add(ComponentParam leaf)
         {
             try
@@ -33,7 +48,11 @@ namespace BotNetCore.BusinessObjects.Responses.ResponeComposite
                 return false;
             }
         }
-
+        /// <summary>
+        /// Remove leaf component from children of this composite
+        /// </summary>
+        /// <param name="leaf">leaf to remove</param>
+        /// <returns>success/failure bool</returns>
         public override bool Remove(ComponentParam leaf)
         {
             try
@@ -47,36 +66,42 @@ namespace BotNetCore.BusinessObjects.Responses.ResponeComposite
                 return false;
             }
         }
-
-        public override List<(ParamTypeEnum, string)> ReturnValue()
+        /// <summary>
+        /// Returns all Values 
+        /// </summary>
+        /// <returns>Returns all Values includes all Child Values of this composite</returns>
+        public override List<ComponentParam> ReturnValue()
         {
             try
             {
-                List<(ParamTypeEnum, string)> returnValues = new List<(ParamTypeEnum, string)>();
-                returnValues.Add((this.paramTypeEnum, this.value));
-                Console.WriteLine("added : <"+this.paramTypeEnum.Value.ToString() + " value: " + this.value.ToString()+ " >to List");
+                List<ComponentParam> returnValues = new List<ComponentParam>();
+                returnValues.Add(this);//(this.paramTypeEnum, this.value));
                 foreach (var child in children)
                 {
-                    returnValues.Add((child.paramTypeEnum, child.value));
-                    Console.WriteLine("added : <" + child.paramTypeEnum.Value.ToString() + " value: " + child.value.ToString() + " >to List");
+                    if(child is ParamTypeEnumComposite paramTypeEnumComposite) returnValues.AddRange(paramTypeEnumComposite.ReturnValue());
+                    if(child is ParamTypeEnumLeaf leaf) returnValues.Add(leaf);
                 }
                 return returnValues;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                return new List<(ParamTypeEnum, string)>();
+                return new List<ComponentParam>();
             }
         }
-
+        /// <summary>
+        /// Show Values of all
+        /// </summary>
+        /// <returns></returns>
         public override bool ShowValues()
         {
             try
             {
-                Console.WriteLine(this.paramTypeEnum.Value.ToString() + " value: "+ this.value.ToString());
+                Console.WriteLine("Composite ParamTypeEnum: " + this.paramTypeEnum.Value.ToString() + " value: "+ this.value.ToString());
                 foreach(var child in children)
                 {
-                    Console.WriteLine(child.paramTypeEnum.Value.ToString() + " value: " + child.value.ToString());
+                    if (child is ParamTypeEnumComposite paramTypeEnumComposite) paramTypeEnumComposite.ShowValues();
+                    Console.WriteLine("ParamTypeEnum: "+ child.paramTypeEnum.Value.ToString() + " value: " + child.value.ToString());
                 }
                 return true;
             }

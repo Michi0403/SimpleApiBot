@@ -18,8 +18,8 @@
 	<PackageTags>example;httpbot;instagram;icq</PackageTags>
 	<PackageReleaseNotes>Early release of example Implementations for an icq or a telegram bot using HttpBotNetCore</PackageReleaseNotes>
 	<PackAsTool>True</PackAsTool>
-	<AssemblyVersion>0.0.0.2</AssemblyVersion>
-	<FileVersion>0.0.0.2</FileVersion>
+	<AssemblyVersion>0.0.0.3</AssemblyVersion>
+	<FileVersion>0.0.0.3</FileVersion>
 	<PackageLicenseFile>LICENSE</PackageLicenseFile>
 	<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 	<IncludeSymbols>True</IncludeSymbols>
@@ -28,7 +28,7 @@
 	<AnalysisLevel>6.0-all</AnalysisLevel>
 	<Title>Example Implementation of HttpBotNetCore</Title>
 	<NeutralLanguage>en-150</NeutralLanguage>
-	<VersionPrefix>0.0.0.2</VersionPrefix>
+	<VersionPrefix>0.0.0.3</VersionPrefix>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -59,8 +59,8 @@
 	<ProjectReference Include="..\HttpBotNetCore\BotNetCore.csproj" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+  <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 	<Exec Command="&quot;C:\Program Files (x86)\Windows Kits\10\bin\10.0.20348.0\x64\signtool.exe&quot; sign /f C:\CertForBuilding\SnkToBuildSigned.pfx /p p@ssw()rt /fd SHA256 &quot;C:\Users\Michael-PC\Documents\sourcetreeprojects#\SimpleApiBot\HttpBotNet\HttpBotNet\bin\Debug\net6.0\HttpBotNet.dll&quot;&#xD;&#xA;&quot;C:\Program Files (x86)\Windows Kits\10\bin\10.0.20348.0\x64\signtool.exe&quot; sign /f C:\CertForBuilding\SnkToBuildSigned.pfx /p p@ssw()rt /fd SHA256 &quot;C:\Users\Michael-PC\Documents\sourcetreeprojects#\SimpleApiBot\HttpBotNet\HttpBotNet\bin\Debug\net6.0\HttpBotNet.exe&quot;&#xD;&#xA;&quot;C:\Program Files (x86)\Windows Kits\10\bin\10.0.20348.0\x64\signtool.exe&quot; sign /f C:\CertForBuilding\SnkToBuildSigned.pfx /p p@ssw()rt /fd SHA256 &quot;C:\Users\Michael-PC\Documents\sourcetreeprojects#\SimpleApiBot\HttpBotNet\HttpBotNet\bin\Debug\net6.0\BotNetCore.dll&quot;&#xD;&#xA;&quot;C:\Program Files (x86)\Windows Kits\10\bin\10.0.20348.0\x64\signtool.exe&quot; sign /f C:\CertForBuilding\SnkToBuildSigned.pfx /p p@ssw()rt /fd SHA256 &quot;C:\Users\Michael-PC\Documents\sourcetreeprojects#\SimpleApiBot\HttpBotNet\HttpBotNet\bin\Debug\net6.0\publish\BotNetCore.dll&quot;&#xD;&#xA;&quot;C:\Program Files (x86)\Windows Kits\10\bin\10.0.20348.0\x64\signtool.exe&quot; sign /f C:\CertForBuilding\SnkToBuildSigned.pfx /p p@ssw()rt /fd SHA256 &quot;C:\Users\Michael-PC\Documents\sourcetreeprojects#\SimpleApiBot\HttpBotNet\HttpBotNet\bin\Debug\net6.0\publish\HttpBotNet.dll&quot;&#xD;&#xA;&quot;C:\Program Files (x86)\Windows Kits\10\bin\10.0.20348.0\x64\signtool.exe&quot; sign /f C:\CertForBuilding\SnkToBuildSigned.pfx /p p@ssw()rt /fd SHA256 &quot;C:\Users\Michael-PC\Documents\sourcetreeprojects#\SimpleApiBot\HttpBotNet\HttpBotNet\bin\Debug\net6.0\publish\HttpBotNet.exe&quot;" />
-  </Target>
+  </Target>-->
 
 </Project>
