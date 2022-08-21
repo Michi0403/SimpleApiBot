@@ -86,12 +86,50 @@ namespace BotNetCore.Factories
                             actualOrNewComposite.Add(compositeObject);
                             break;
                         case JsonValueKind.Array:
-                            ParamTypeEnumComposite compositeObject2 = new ParamTypeEnumComposite(
-                                ParamTypeEnum.IsArray,
+                            TelegramParamTypeEnum paramArray = TelegramParamTypeEnum.IsArray as TelegramParamTypeEnum;
+                            try
+                            {
+                                paramArray = TelegramParamTypeEnum.IsArray as TelegramParamTypeEnum;
+                                try
+                                {
+                                    paramArray = (TelegramParamTypeEnum)typeof(TelegramParamTypeEnum).GetField(
+                                                elementToProcess.ValueKind.ToString(),
+                                                BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
+                                                .GetValue(null);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine($"TelegramParamTypeEnum {elementToProcess.ValueKind.ToString()} not found: {ex}");
+                                }
+
+                                
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("Could not Resolve Array name");
+                                Console.WriteLine(ex.ToString());
+                            }
+                            ParamTypeEnumComposite compositeObject2 = null;
+                            try
+                            {
+                                compositeObject2 = new ParamTypeEnumComposite(
+                                paramArray,
                                 elementToProcess.GetRawText());
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("Could not Create ParamTypeComposite");
+                                Console.WriteLine(ex.ToString());
+                            }
+
                             foreach (var jsonElement in elementToProcess.EnumerateArray())
                             {
-                                Enumerate(jsonElement, compositeObject2);
+                                if(jsonElement.ValueKind == JsonValueKind.Array || jsonElement.ValueKind == JsonValueKind.Object || jsonElement.ValueKind == JsonValueKind.Undefined)
+                                    Enumerate(jsonElement, compositeObject2);
+                                else
+                                {
+                                    actualOrNewComposite.Add(new ParamTypeEnumLeaf(actualOrNewComposite.paramTypeEnum, jsonElement.GetRawText()));
+                                }
                             }
                             actualOrNewComposite.Add(compositeObject2);
                             break;
@@ -101,7 +139,7 @@ namespace BotNetCore.Factories
                         case JsonValueKind.True:
                         case JsonValueKind.False:
                         case JsonValueKind.Null:
-                            ParamTypeEnumLeaf leaf2 = new ParamTypeEnumLeaf(actualOrNewComposite.paramTypeEnum, elementToProcess.GetRawText());
+                            ParamTypeEnumLeaf leaf2 = new ParamTypeEnumLeaf(paramTypeEnumComposite.paramTypeEnum, elementToProcess.GetRawText());
                             actualOrNewComposite.Add((leaf2));
                             break;
                         default:

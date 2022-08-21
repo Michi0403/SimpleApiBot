@@ -187,6 +187,8 @@ namespace BotNetCore.BusinessObjects.Enums.ApiCommandEnums
         public static readonly TelegramParamTypeEnum new_chat_participant = new TelegramParamTypeEnum("new_chat_participant");
         [DataMember]
         public static readonly TelegramParamTypeEnum new_chat_members = new TelegramParamTypeEnum("new_chat_members");
+        [DataMember]
+        public static readonly TelegramParamTypeEnum Array = new TelegramParamTypeEnum("Array");
         public TelegramParamTypeEnum(string value) : base(value)
         {
         }

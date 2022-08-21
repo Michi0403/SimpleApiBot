@@ -50,7 +50,6 @@ namespace HttpBotNet
                 telegramCfg.SettingConfig.PathToThisConfig= Directory.GetCurrentDirectory().TrimEnd('\\')+ '\\'+"telegramConfig.xml";
                 telegramCfg.SettingConfig.PathToCert = telegramCfg.SettingConfig.PathToCert.TrimEnd('\\') + '\\' + "telegramCert\\";
                 telegramCfg.SettingConfig.CertFileName = "TelegramBotXCertFile";
-                telegramCfg.SettingConfig.Token = "xxx";
                 telegramCfg.SettingConfig.PathForHttpData= telegramCfg.SettingConfig.PathToCert.TrimEnd('\\') + '\\' + "telegramPathForHttpData\\";
                 telegramCfg.SettingConfig.ApiRoute = @"https://api.telegram.org/";
                 File.Delete(telegramCfg.SettingConfig.PathToThisConfig);
@@ -148,39 +147,51 @@ namespace HttpBotNet
 
                     //Look in Responses for something todo
                     Console.WriteLine("Inspect Responses for specific Composites");
-                    foreach(ComponentParam component in messagesInResponse.Response.ReturnValue().Where(x => x.value.Contains("/IchBraucheAufmerksamkeit") && x.paramTypeEnum != ParamTypeEnum.isRootTrunk && x.paramTypeEnum.ToString() != "RootTrunk of JSON Doc;").ToList() )
+                    foreach(ComponentParam updates in messagesInResponse.Response.ReturnValue().Where(x => x.value.Contains("/IchBraucheAufmerksamkeit") ).ToList() )
                     {
                         Console.WriteLine("Component which contains /IchBraucheAufmerksamkeit");
 
 
-                        if(component is ParamTypeEnumComposite paramTypeEnumComposite)
+                        if(updates is ParamTypeEnumComposite paramTypeEnumComposite)
                         {
                             Console.WriteLine("Is Composite");
-                            List<ComponentParam> values = paramTypeEnumComposite.ReturnValue()
+                            List<ComponentParam> values = paramTypeEnumComposite.ReturnValue().Where(x=> x is ParamTypeEnumComposite).ToList();
+                            values = paramTypeEnumComposite.ReturnValue()
                                 .Where(
-                                    x => x.value.Contains("/IchBraucheAufmerksamkeit") &&
-                                        x.paramTypeEnum.ToString() != "RootTrunk of JSON Doc;" &&
-                                        x.value.Contains("\"message\"")
+                                    x => x.value.Contains("/IchBraucheAufmerksamkeit") 
+                                    && x.value.Contains("\"message_id\"")
                                         )
                                 .ToList();
-                            foreach(ComponentParam value in values)
+                                Console.WriteLine("found a inner composite which value contains message Param");
+                            foreach(ComponentParam value in values.Where(x=> x.paramTypeEnum.Value == TelegramParamTypeEnum.result.ToString()))
                             {
-                                ListOfMessages.Add(value);
+                                if(value is ParamTypeEnumComposite paramTypeEnumComposite1)
+                                {
+                                        List<ComponentParam> eventValues = value.ReturnValue();
+                                        ListOfMessages.AddRange(eventValues);
+                                        Console.WriteLine("added Composite of Paramtype message to ListOfMessages");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Seeked for wrong ParamType maybe, added nothing");
+                                    Console.WriteLine("---Not added it following Param---");
+                                    Console.WriteLine($@"   Param: " + value.paramTypeEnum.Value);
+                                    Console.WriteLine($@"   Value: " + value.value);
+                                }
                             }
-                            Console.WriteLine("added " + values.Count + "messages");
                         }
-                        else if (component is ParamTypeEnumLeaf paramTypeEnumLeaf)
-                        {
-                            ListOfMessages.Add(paramTypeEnumLeaf);
-                            Console.WriteLine("added leaf to messages");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Seeked for wrong parameters maybe, added nothing");
-                            Console.WriteLine("---param---");
-                            Console.WriteLine($@"   Param: " + component.paramTypeEnum.Value);
-                            Console.WriteLine($@"   Value: " + component.value);
-                        }
+                        //else if (component is ParamTypeEnumLeaf paramTypeEnumLeaf)
+                        //{
+                        //    ListOfMessages.Add(paramTypeEnumLeaf);
+                        //    Console.WriteLine("added leaf to messages");
+                        //}
+                        //else
+                        //{
+                        //    Console.WriteLine("Seeked for wrong parameters maybe, added nothing");
+                        //    Console.WriteLine("---param---");
+                        //    Console.WriteLine($@"   Param: " + component.paramTypeEnum.Value);
+                        //    Console.WriteLine($@"   Value: " + component.value);
+                        //}
                     }
                 }
 
@@ -192,14 +203,21 @@ namespace HttpBotNet
                         Console.WriteLine("Is Composite");
                         foreach(ComponentParam param in paramTypeEnumComposite.ReturnValue())
                         {
-                            Console.WriteLine("---param in ListOfMessages---");
+                            if(param is ParamTypeEnumComposite param2)
+                            {
+                                Console.WriteLine("Is Inner Composite");
+                                Console.WriteLine("---param in ListOfMessages inner Composite---");
+                                Console.WriteLine($@"   Param: " + param.paramTypeEnum.Value);
+                                Console.WriteLine($@"   Value: " + param.value);
+                            }
+                            Console.WriteLine("---param in ListOfMessages Composite---");
                             Console.WriteLine($@"   Param: " + param.paramTypeEnum.Value);
                             Console.WriteLine($@"   Value: " + param.value);
                         }
                     }
                     else if(foundMessage is ParamTypeEnumLeaf paramTypeEnumLeaf)
                     {
-                        Console.WriteLine("---param in ListOfMessages---");
+                        Console.WriteLine("---ParamTypeEnumLeaf in ListOfMessages---");
                         Console.WriteLine($@"   Param: " + foundMessage.paramTypeEnum.Value);
                         Console.WriteLine($@"   Value: " + foundMessage.value);
                     }
