@@ -127,82 +127,118 @@ namespace HttpBotNet
                 Console.WriteLine("Deserialized : " + deserializedResponses.Count + " Responses");
 
                 Console.WriteLine("Seek for /IchBraucheAufmerksamkeit");
-                List<ComponentParam> ListOfMessages = new List<ComponentParam>();
-                foreach(IBotResponse messagesInResponse in deserializedResponses)
-                {
-                    //Look in Responses for something todo
-                    Console.WriteLine("Inspect Responses for specific Composites");
-                    var kiddies = messagesInResponse.Response.ReturnValue();
 
-                    foreach(var entryttt in kiddies)
+                commandFactory.CommandQueue.Clear();
+
+                System.IO.DirectoryInfo directory = new DirectoryInfo(telegramCfg.SettingConfig.PathForHttpData.TrimEnd('\\') + '\\');
+
+                foreach (FileInfo file in directory.EnumerateFiles())
+                {
+                    file.Delete();
+                }
+                foreach (DirectoryInfo dir in directory.EnumerateDirectories())
+                {
+                    dir.Delete(true);
+                }
+
+
+                try
+                {
+                    foreach(IBotResponse messagesInResponse in deserializedResponses)
                     {
-                        try
+                        var responseContent = messagesInResponse.Response.ReturnValue();
+                        foreach(var entry in responseContent)
                         {
-                            if(entryttt!=null && entryttt.paramTypeEnum!=null&& entryttt.paramTypeEnum.Value!=null)
+                            try
                             {
-                                Console.WriteLine("Value paramTypeEnum " + entryttt.paramTypeEnum.Value);
-                                Console.WriteLine("Value telegramParamtypeEnum " + TelegramParamTypeEnum.message.ToString() + Environment.NewLine + entryttt.value.ToString());
-                                if (entryttt.paramTypeEnum.Value.ToString() == TelegramParamTypeEnum.message.ToString() + Environment.NewLine + entryttt.value.ToString())
+                                if (entry != null && entry.paramTypeEnum != null && entry.paramTypeEnum.Value != null && entry is ParamTypeEnumComposite paramTypeEnumComposite)
                                 {
-                                    ListOfMessages.Add(entryttt);
+                                    Console.WriteLine($"found some Composite in this Response: {paramTypeEnumComposite.paramTypeEnum.Value} : {paramTypeEnumComposite.value.ToString()}");
+                                        var queue = TrunkSearcher.ReadParamTypeEnumCompositeRecursive(
+                                        paramTypeEnumComposite,
+                                        TelegramParamTypeEnum.message);
+
+                                    foreach(var subEntry in queue)
+                                    {
+                                        Console.WriteLine($@"{subEntry.paramTypeEnum.Value}: {subEntry.value.ToString()}");
+                                        if(subEntry.value.Contains("/IchBraucheAufmerksamkeit"))
+                                        {
+                                                //get from param from underlying chat, planned more comfort features later
+                                            if(subEntry.children.Count>0 )
+                                            {
+                                                if (subEntry == null)
+                                                    throw new ArgumentNullException(
+                                                        "couldn't find anything processable in " +
+                                                            subEntry.ToString());
+                                            }
+                                            var message = (subEntry.children
+                                            .FirstOrDefault(
+                                                x => x is ParamTypeEnumComposite &&
+                                                    x.paramTypeEnum.Value ==
+                                                    TelegramParamTypeEnum.message.ToString()) as ParamTypeEnumComposite).children[0] as ParamTypeEnumComposite;
+                                            if(message == null)
+                                                throw new ArgumentNullException(
+                                                    "couldn't find anything processable in " +
+                                                        subEntry.children.ToString());
+                                            var from = (message?.children.FirstOrDefault(
+                                                x => x.paramTypeEnum.Value == TelegramParamTypeEnum.from.ToString()) as ParamTypeEnumComposite).children[0] as ParamTypeEnumComposite;
+
+                                            var chatId = from?.children.FirstOrDefault(
+                                                x => x is ParamTypeEnumLeaf &&
+                                                    x.paramTypeEnum.Value == TelegramParamTypeEnum.id.ToString());
+
+                                            ConcurrentDictionary<ParamTypeEnum, string> paramsendmessage = new ConcurrentDictionary<ParamTypeEnum, string>(
+                                            new Dictionary<ParamTypeEnum, string>()
+                                            {
+                                            { TelegramParamTypeEnum.chat_id, chatId.value.ToString() },
+                                            { TelegramParamTypeEnum.text, "Dich fick ich auch noch" }
+                                            });
+
+                                            if (commandFactory.CreateCommand(
+                                                (ApiCommandEnum)TelegramApiCommandEnum.sendMessage,
+                                                HttpMethodEnum.Get,
+                                                parameter: paramsendmessage) is IBotCommand botcommandExample)
+                                                commandFactory.TryAddCommandToQueue(botcommandExample);
+                                        }
+                                       
+
+
+                                    }
+
+
                                 }
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                                Console.WriteLine("Error in adding message");
-                                Console.WriteLine(ex.ToString());
-                        }
-                           
-                    }
-
-                }
-                List<ParamTypeEnumLeaf> texts = new List<ParamTypeEnumLeaf>();
-                foreach(ParamTypeEnumComposite foundMessage in ListOfMessages.Where(x => x is ParamTypeEnumComposite))
-                {
-                    Console.WriteLine("Found Message");
-                    Console.WriteLine("Is Composite");
-                    foreach(ParamTypeEnumComposite testiiisfdf in foundMessage.children.Where(x=> x is ParamTypeEnumComposite))
-                    {
-
-                            Console.WriteLine("testiiisfdf: " + testiiisfdf.paramTypeEnum.Value.ToString() + Environment.NewLine + testiiisfdf.value.ToString());
-                            var children = testiiisfdf.children;
-                            foreach(var child in children)
+                            catch (Exception ex)
                             {
-                                    if(child.paramTypeEnum.Value == TelegramParamTypeEnum.text.ToString() + Environment.NewLine + testiiisfdf.value.ToString())
-                                        texts.Add(child as ParamTypeEnumLeaf);
-                                    Console.WriteLine("child: " + child.paramTypeEnum.Value.ToString() + Environment.NewLine + testiiisfdf.value.ToString());
-                                    foreach (var kids in children)
-                                    {
-                                        if (kids.paramTypeEnum.Value == TelegramParamTypeEnum.text.ToString() + Environment.NewLine + testiiisfdf.value.ToString())
-                                            texts.Add(kids as ParamTypeEnumLeaf);
-                                        Console.WriteLine("kids: " + kids.paramTypeEnum.Value.ToString() + Environment.NewLine + testiiisfdf.value.ToString());
-                                    }
+                                Console.WriteLine(ex.ToString());
                             }
-
-                            //var valuesOfMessageObject = testiiisfdf.ReturnValue();
-
-                            //if((testiiisfdf.paramTypeEnum.Value.ToString() ==
-                            //        TelegramParamTypeEnum.text.ToString()) &&
-                            //    testiiisfdf.value.Contains(@"/IchBraucheAufmerksamkeit"))
-                            //{
-                            //    Console.WriteLine("Found the value in text");
-                            //    Console.WriteLine(
-                            //        testiiisfdf.paramTypeEnum.ToString() +
-                            //            " ,value= " +
-                            //            testiiisfdf.value.ToString());
-                            //}
+                        }
                     }
-                    
                 }
-                foreach(var text in texts)
+                catch (Exception ex)
                 {
-                    Console.WriteLine(
-                        "Paramtypeenum: " + text.paramTypeEnum.Value + Environment.NewLine + "value: " + text.value);
+                    Console.WriteLine(ex.ToString());
                 }
-                Console.WriteLine("Collect Information of /IchBraucheAufmerksamkeit messages and filter for");
 
-                //foreach(var entry in ListOfMessages.Where(x => ))
+                commandFactory.TryRunFullQueue();
+
+                Thread.Sleep(10000);
+
+
+                botResponseBag = bot.BotResponseFactory.ResponseBag;
+
+                if (botResponseBag != null)
+                {
+                    for (int counter = 0; counter < botResponseBag.Count; counter++)
+                    {
+                        IBotResponse response = null;
+                        botResponseBag.TryTake(out response);
+                        var response2 = response as Response;
+                        if (response2 != null)
+                            response2.Save(@$"{telegramCfg.SettingConfig.PathForHttpData}" + @$"ResponseOnMessage_" + Path.GetRandomFileName() + "_" + DateTime.Now.ToLongTimeString().Replace(" ", "_").Replace(":", "") + ".xml");
+
+                    }
+                }
 
                 Console.WriteLine("Telegram Implementation ended here");
             }
