@@ -49,6 +49,7 @@ namespace HttpBotNet
                 telegramCfg.SettingConfig.Nick = "@iLikeToFartBot";
                 telegramCfg.SettingConfig.PathToThisConfig= Directory.GetCurrentDirectory().TrimEnd('\\')+ '\\'+"telegramConfig.xml";
                 telegramCfg.SettingConfig.PathToCert = telegramCfg.SettingConfig.PathToCert.TrimEnd('\\') + '\\' + "telegramCert\\";
+                telegramCfg.SettingConfig.Token = "xxx";
                 telegramCfg.SettingConfig.CertFileName = "TelegramBotXCertFile";
                 telegramCfg.SettingConfig.PathForHttpData= telegramCfg.SettingConfig.PathForHttpData.TrimEnd('\\') + '\\';
                 telegramCfg.SettingConfig.ApiRoute = @"https://api.telegram.org/";
@@ -137,11 +138,14 @@ namespace HttpBotNet
                     {
                         try
                         {
-                            Console.WriteLine("Value paramTypeEnum " + entryttt.paramTypeEnum.Value);
-                            Console.WriteLine("Value telegramParamtypeEnum " + TelegramParamTypeEnum.message.ToString());
-                            if (entryttt.paramTypeEnum.Value.ToString() == TelegramParamTypeEnum.message.ToString())
+                            if(entryttt!=null && entryttt.paramTypeEnum!=null&& entryttt.paramTypeEnum.Value!=null)
                             {
-                                ListOfMessages.Add(entryttt);
+                                Console.WriteLine("Value paramTypeEnum " + entryttt.paramTypeEnum.Value);
+                                Console.WriteLine("Value telegramParamtypeEnum " + TelegramParamTypeEnum.message.ToString() + Environment.NewLine + entryttt.value.ToString());
+                                if (entryttt.paramTypeEnum.Value.ToString() == TelegramParamTypeEnum.message.ToString() + Environment.NewLine + entryttt.value.ToString())
+                                {
+                                    ListOfMessages.Add(entryttt);
+                                }
                             }
                         }
                         catch (Exception ex)
@@ -153,35 +157,49 @@ namespace HttpBotNet
                     }
 
                 }
-
-                foreach(ComponentParam foundMessage in ListOfMessages)
+                List<ParamTypeEnumLeaf> texts = new List<ParamTypeEnumLeaf>();
+                foreach(ParamTypeEnumComposite foundMessage in ListOfMessages.Where(x => x is ParamTypeEnumComposite))
                 {
                     Console.WriteLine("Found Message");
-                    if (foundMessage is ParamTypeEnumComposite paramTypeEnumComposite)
+                    Console.WriteLine("Is Composite");
+                    foreach(ParamTypeEnumComposite testiiisfdf in foundMessage.children.Where(x=> x is ParamTypeEnumComposite))
                     {
-                        Console.WriteLine("Is Composite");
-                        foreach(ComponentParam param in paramTypeEnumComposite.ReturnValue())
-                        {
-                            if(param is ParamTypeEnumComposite param2)
-                            {
-                                Console.WriteLine("Is Inner Composite");
-                                Console.WriteLine("---param in ListOfMessages inner Composite---");
-                                Console.WriteLine($@"   Param: " + param.paramTypeEnum.Value);
-                                Console.WriteLine($@"   Value: " + param.value);
-                            }
-                            Console.WriteLine("---param in ListOfMessages Composite---");
-                            Console.WriteLine($@"   Param: " + param.paramTypeEnum.Value);
-                            Console.WriteLine($@"   Value: " + param.value);
-                        }
-                    }
-                    else if(foundMessage is ParamTypeEnumLeaf paramTypeEnumLeaf)
-                    {
-                        Console.WriteLine("---ParamTypeEnumLeaf in ListOfMessages---");
-                        Console.WriteLine($@"   Param: " + foundMessage.paramTypeEnum.Value);
-                        Console.WriteLine($@"   Value: " + foundMessage.value);
-                    }
-                }
 
+                            Console.WriteLine("testiiisfdf: " + testiiisfdf.paramTypeEnum.Value.ToString() + Environment.NewLine + testiiisfdf.value.ToString());
+                            var children = testiiisfdf.children;
+                            foreach(var child in children)
+                            {
+                                    if(child.paramTypeEnum.Value == TelegramParamTypeEnum.text.ToString() + Environment.NewLine + testiiisfdf.value.ToString())
+                                        texts.Add(child as ParamTypeEnumLeaf);
+                                    Console.WriteLine("child: " + child.paramTypeEnum.Value.ToString() + Environment.NewLine + testiiisfdf.value.ToString());
+                                    foreach (var kids in children)
+                                    {
+                                        if (kids.paramTypeEnum.Value == TelegramParamTypeEnum.text.ToString() + Environment.NewLine + testiiisfdf.value.ToString())
+                                            texts.Add(kids as ParamTypeEnumLeaf);
+                                        Console.WriteLine("kids: " + kids.paramTypeEnum.Value.ToString() + Environment.NewLine + testiiisfdf.value.ToString());
+                                    }
+                            }
+
+                            //var valuesOfMessageObject = testiiisfdf.ReturnValue();
+
+                            //if((testiiisfdf.paramTypeEnum.Value.ToString() ==
+                            //        TelegramParamTypeEnum.text.ToString()) &&
+                            //    testiiisfdf.value.Contains(@"/IchBraucheAufmerksamkeit"))
+                            //{
+                            //    Console.WriteLine("Found the value in text");
+                            //    Console.WriteLine(
+                            //        testiiisfdf.paramTypeEnum.ToString() +
+                            //            " ,value= " +
+                            //            testiiisfdf.value.ToString());
+                            //}
+                    }
+                    
+                }
+                foreach(var text in texts)
+                {
+                    Console.WriteLine(
+                        "Paramtypeenum: " + text.paramTypeEnum.Value + Environment.NewLine + "value: " + text.value);
+                }
                 Console.WriteLine("Collect Information of /IchBraucheAufmerksamkeit messages and filter for");
 
                 //foreach(var entry in ListOfMessages.Where(x => ))

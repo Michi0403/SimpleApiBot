@@ -10,8 +10,15 @@ using System.Threading.Tasks;
 
 namespace BotNetCore.Helper
 {
+    /// <summary>
+    /// Manages HTTPClient
+    /// </summary>
     public class LoggingHandler : DelegatingHandler
     {
+        /// <summary>
+        /// Constructor for Delegating /LoggingHandler for HTTPClient
+        /// </summary>
+        /// <param name="innerHandler"></param>
         public LoggingHandler(HttpMessageHandler innerHandler)
             : base(innerHandler)
         {
@@ -20,6 +27,12 @@ namespace BotNetCore.Helper
         private event EventHandler<GenericEventArgs<HttpRequestMessage>> _onRequestAvailable;
         private event EventHandler<GenericEventArgs<string>> _onRequestContentAvailable;
         private event EventHandler<GenericEventArgs<string,byte[]>> _onResponseContentAvailable;
+        /// <summary>
+        /// SendAsynd HTTP Request
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             try
@@ -81,19 +94,26 @@ namespace BotNetCore.Helper
             }
             
         }
+        /// <summary>
+        /// Generic EventHandler OnRequestContentAvailable
+        /// </summary>
 
         public event EventHandler<GenericEventArgs<string>> OnRequestContentAvailable
         {
             add { _onRequestContentAvailable += value; }
             remove { _onRequestContentAvailable -= value; }
         }
-
+        /// <summary>
+        /// Generic Eventhandler OnResponseContentAvailable
+        /// </summary>
         public event EventHandler<GenericEventArgs<string, byte[]>> OnResponseContentAvailable
         {
             add { _onResponseContentAvailable += value; }
             remove { _onResponseContentAvailable -= value; }
         }
-
+        /// <summary>
+        /// Generic Eventhandler OnRequestAvailable
+        /// </summary>
         public event EventHandler<GenericEventArgs<HttpRequestMessage>> OnRequestAvailable
         {
             add { _onRequestAvailable += value; }

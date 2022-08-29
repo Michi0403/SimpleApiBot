@@ -249,6 +249,8 @@ namespace BotNetCore.Bot
                 Console.WriteLine(ex);
             }
         }
+
+
     }
 }
 
